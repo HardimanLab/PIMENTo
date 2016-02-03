@@ -1,0 +1,21 @@
+Package: illuminaPipeline
+Title: What the Package Does (one line, title case)
+Version: 0.0.0.9000
+Authors@R: person("Nash", "Thomas", , "nashtf@g.cofc.edu", role = c("aut", "cre"))
+Description: illuminaPipeline is an R package to normalize, analyze, and visualize
+data from Illumina microarrays for two class unpaired experiments.
+Depends:
+    R (>= 3.2.3)
+Imports:
+    limma,
+    affy,
+    samr,
+    tools,
+    stringr,
+    DESeq2,
+    gplots,
+    ggplot2,
+    RColorBrewer
+License: GPL
+LazyData: true
+RoxygenNote: 5.0.1
