@@ -4,7 +4,8 @@
 \alias{preprocessData}
 \title{Generate MA plots of raw and normalized data}
 \usage{
-preprocessPlots(inputFile, fileSheet=1, ntext=2, dataCol, name=1, id=2)
+preprocessPlots(inputFile, fileSheet=1, ntext=2, dataCol, symbolIndex=1,
+ idIndex=2)
 }
 \arguments{
 \item{inputFile}{Path to the microarray expression file, be it .xlsx or .csv}
@@ -16,16 +17,18 @@ preprocessPlots(inputFile, fileSheet=1, ntext=2, dataCol, name=1, id=2)
 \item{dataCol}{Range of columns which contain data (indexing begins with
 first column of file)}
 
-\item{name}{Column index which contains gene names}
+\item{symbolIndex}{Column index which contains gene symbols}
 
-\item{id}{Column index which contains gene ID's}
+\item{idIndex}{Column index which contains gene ID's}
 }
 \value{
 A list with components
 \item{ntext}{Number of leading text columns}
 \item{dataCol}{Vector of column indices containing array data}
-\item{id}{Column index containing gene ID}
-\item{name}{Column index containing gene name}
+\item{id}{Vector containing gene ID's}
+\item{idIndex}{Column index containing gene ID information}
+\item{symbol}{Vector containing gene symbols}
+\item{symbolIndex}{Column index containing gene symbol information}
 \item{descStats}{Vector of column indices containing descriptive statistics}
 \item{pipelineName}{Name of pipeline generated from input file name sans 
 extension}
@@ -34,7 +37,7 @@ extension}
 }
 \description{
 Normalize input raw data using quantile and mloess methods. Plots
-of the normalized data along with a dendrogram clustering all samples will 
+of the normalized data along with a dendrogram librarclustering all samples will 
 be stored in newly created pipeline directory.
 }
 

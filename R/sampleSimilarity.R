@@ -3,22 +3,21 @@
 #' plot labelled with control and experimental groups.
 #' @usage sampleSimilarity(runSAM.obj)
 #' @param runSAM.obj Object returned from call to runSAM
-#' 
 #' @import ggplot2
 #' @export
 
 sampleSimilarity <- function(runSAM.obj) {
 
-  groups = sapply(input$response,function(sample) 
+  groups = sapply(runSAM.obj$response,function(sample) 
     ifelse(sample == 1,"control","experiment"))
   
-  similarityFile=paste0("./",input$importName,"_pipeline/",input$importName,
+  similarityFile=paste0("./",runSAM.obj$pipelineName,"_pipeline/",runSAM.obj$pipelineName,
                         "_sampleSimilarity.ps")  
   postscript(file=similarityFile,paper="letter")
   
   ## Create heatmap plot of sample similarity
   
-  normData <- as.matrix(input$data[,input$dataCol])
+  normData <- as.matrix(runSAM.obj$data[,runSAM.obj$dataCol])
   storage.mode(normData) <- "integer"
   rld <- DESeq2::rlog(normData,fitType="local")
   distMatrix <- as.matrix(dist(t(rld)))

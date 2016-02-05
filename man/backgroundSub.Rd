@@ -21,12 +21,15 @@ backgroundCutoff}
 A list with components
 \item{ntext}{Number of leading text columns}
 \item{dataCol}{Vector of column indices containing array data}
-\item{id}{Column index containing gene ID}
-\item{name}{Column index containing gene name}
+\item{id}{Vector containing gene ID's}
+\item{idInd}{Column index containing gene ID information}
+\item{symbol}{Vector containing gene symbols}
+\item{symbolIndex}{Column index containing gene symbol information}
 \item{descStats}{Vector of column indices containing descriptive statistics}
 \item{pipelineName}{Name of pipeline generated from input file name sans 
 extension}
-\item{data}{Data frame of chosen normalization method data}
+\item{data}{Data frame of descriptive stats and normalized data for chosen 
+method}
 }
 \description{
 Remove all genes that have an maximum intensity level below that

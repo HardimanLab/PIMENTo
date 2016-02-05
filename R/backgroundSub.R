@@ -12,12 +12,15 @@
 #' @return A list with components
 #' \item{ntext}{Number of leading text columns}
 #' \item{dataCol}{Vector of column indices containing array data}
-#' \item{id}{Column index containing gene ID}
-#' \item{name}{Column index containing gene name}
+#' \item{id}{Vector containing gene ID's}
+#' \item{idInd}{Column index containing gene ID information}
+#' \item{symbol}{Vector containing gene symbols}
+#' \item{symbolIndex}{Column index containing gene symbol information}
 #' \item{descStats}{Vector of column indices containing descriptive statistics}
 #' \item{pipelineName}{Name of pipeline generated from input file name sans 
 #' extension}
-#' \item{data}{Data frame of chosen normalization method data}
+#' \item{data}{Data frame of descriptive stats and normalized data for chosen 
+#' method}
 #' @export
 
 backgroundSub <- function(initializePipeline.obj,
@@ -42,8 +45,7 @@ backgroundSub <- function(initializePipeline.obj,
   keepIndices <- !(geneMax < 2^cutoff)
   descStats <- descStats[keepIndices,]
   subtractedData <- backgroundData[keepIndices,]
-  return(list(data=cbind(descStats,subtractedData),name=initializePipeline.obj$name,
-              id=initializePipeline.obj$id,ntext=initializePipeline.obj$ntext,
-              descStats=descStats,pipelineName=initializePipeline.obj$pipelineName,
-              dataCol=initializePipeline.obj$dataCol))
+  initializePipeline.obj$data <- cbind(descStats,subtractedData)
+  
+  return(initializePipeline.obj)
 }

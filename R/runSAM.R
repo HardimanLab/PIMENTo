@@ -22,14 +22,15 @@ runSAM <- function(backgroundSub.obj,response,delta) {
    
   dataSAM <- backgroundSub.obj$data[,backgroundSub.obj$dataCol]
   log.dataSAM <- log2(dataSAM)
-  genenames <- backgroundSub.obj$name
-  geneid <- backgroundSub.obj$id
+  genenames <- as.data.frame(backgroundSub.obj$symbol)
+  geneid <- as.data.frame(backgroundSub.obj$id)
   
   if(length(response) != ncol(dataSAM))
     stop("Number of responses does not match number of samples.")
   if(max(response) > 2 || min(response) < 1)
     stop("Arrays can only belong to control (1) or experimental (2).")
-    
+  if(missing(delta))
+    stop("Provide a delta tuning parameter")
   
   listSAM = list(x=log.dataSAM,y=response,genenames=genenames,geneid=geneid,
                  logged2=T)
@@ -38,10 +39,12 @@ runSAM <- function(backgroundSub.obj,response,delta) {
                                   s0.perc=50,testStatistic="standard",nperms=100))
   cat("Calculating delta table\n")
   capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=100))
-  print(names(delta.table))
   
   desc.dataSAM <- backgroundSub.obj$data
-  colnames(desc.dataSAM)[1:2] <- c("geneid","genenames")
+  # samr.compute.siggenes.table flips genename and geneid
+  colnames(desc.dataSAM)[c(backgroundSub.obj$symbolInd,
+                           backgroundSub.obj$idInd)] <- c("geneid","genenames")
+  print(colnames(desc.dataSAM))
   siggenes.table <- samr::samr.compute.siggenes.table(samr.obj,delta,desc.dataSAM,
                                                 delta.table,compute.localfdr=TRUE)
   
@@ -54,7 +57,7 @@ runSAM <- function(backgroundSub.obj,response,delta) {
   siggenesFile=paste0(backgroundSub.obj$pipelineName,"_pipeline/",
                       backgroundSub.obj$pipelineName,"_sigGenes.csv")
   allSiggenes <- as.matrix(rbind(siggenes.table$genes.up,siggenes.table$genes.lo))
-  ordered.allSiggenes <- allSiggenes[order(as.numeric(rev(allSiggenes[,8])),
+  ordered.allSiggenes <- allSiggenes[order(-(as.numeric(allSiggenes[,8])),
                                              abs(as.numeric(allSiggenes[,4])),
                                              decreasing=TRUE),]
   write.csv(ordered.allSiggenes,file=siggenesFile,row.names=FALSE)

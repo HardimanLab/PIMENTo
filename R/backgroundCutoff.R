@@ -25,8 +25,8 @@ backgroundCutoff <- function(initializePipeline.obj,method=c("mloess","quantile"
   logData <- log2(geneMax)
   
   if(!missing(xlim.hi)) {
-      plotsFile <- paste0("./",initializePipeline.obj$importName,"_pipeline/",
-                          initializePipeline.obj$importName,"_",method,
+      plotsFile <- paste0("./",initializePipeline.obj$pipelineName,"_pipeline/",
+                          initializePipeline.obj$pipelineName,"_",method,
                           "_backgroundCutoff_",xlim.lo,"_",xlim.hi,".ps")
       postscript(file=plotsFile,paper="letter")
       hist(logData,breaks=200,xlim=c(xlim.lo,xlim.hi), 
@@ -36,8 +36,8 @@ backgroundCutoff <- function(initializePipeline.obj,method=c("mloess","quantile"
       cat("Histogram plots saved at",plotsFile,"\n")
   }
   else {
-    plotsFile <- paste0("./",initializePipeline.obj$importName,"_pipeline/",
-                        initializePipeline.obj$importName,"_",method,
+    plotsFile <- paste0("./",initializePipeline.obj$pipelineName,"_pipeline/",
+                        initializePipeline.obj$pipelineName,"_",method,
                         "_backgroundCutoff_full.ps")
     postscript(file=plotsFile,paper="letter")
     hist(logData,breaks=200,main = "Maximum Illumination Across Arrays",
