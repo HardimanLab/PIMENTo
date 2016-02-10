@@ -23,7 +23,7 @@
 #' method}
 #' @export
 
-backgroundSub <- function(initializePipeline.obj,
+backgroundSubtraction <- function(initializePipeline.obj,
                                   method=c("mloess","quantile"),cutoff) {
 
   if(missing(cutoff))
@@ -33,19 +33,20 @@ backgroundSub <- function(initializePipeline.obj,
     stop("The provided method of", method, "is not one of the avaiable methods.",
       " Use 'quantile' or 'mloess'",call.=FALSE)
   })
-  if(method=="quantile") {
+  if(method=="quantile")
     backgroundData <- initializePipeline.obj$quantile[,initializePipeline.obj$dataCol]
-    descStats <- initializePipeline.obj$quantile[,1:initializePipeline.obj$ntext] 
-  }
-  else if (method=="mloess") {
+  else if (method=="mloess")
     backgroundData <- initializePipeline.obj$mloess[,initializePipeline.obj$dataCol]
-    descStats <- initializePipeline.obj$mloess[,1:initializePipeline.obj$ntext] 
-  }
+  
+  descStats <- initializePipeline.obj$descStats
   geneMax <- apply(backgroundData,1,max)
   keepIndices <- !(geneMax < 2^cutoff)
   descStats <- descStats[keepIndices,]
   subtractedData <- backgroundData[keepIndices,]
   initializePipeline.obj$data <- cbind(descStats,subtractedData)
+  initializePipeline.obj$mloess <- NULL
+  initializePipeline.obj$quantile <- NULL
   
+
   return(initializePipeline.obj)
 }

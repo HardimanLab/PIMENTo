@@ -1,8 +1,9 @@
 #' @title Generate MA plots of raw and normalized data
-#' @description Normalize input raw data using quantile and mloess methods. Plots
-#' of the normalized data along with a dendrogram clustering all samples will 
-#' be stored in newly created pipeline directory.
-#' @usage preprocessPlots(runSAM.obj, pathwaysDir, fileFormat=c("geneid","symbol"))
+#' @description Normalize input raw data using quantile and mloess methods. 
+#' Plots of the normalized data along with a dendrogram clustering all samples 
+#' will be stored in newly created pipeline directory.
+#' @usage preprocessPlots(runSAM.obj, pathwaysDir, fileFormat=c("geneid",
+#' "symbol"))
 #' @param runSAM.obj Object returned from call to runSAM
 #' @param pathwaysDir Directory containing files of genes output from pathway 
 #' analysis
@@ -10,16 +11,14 @@
 #' "geneid" or "symbol"
 #' @export
 
-visualizeOntology <- function(runSAM.obj,pathwaysDir,
+pathwayHeatmap <- function(runSAM.obj,pathwaysDir,
                               fileFormat=c("geneid","symbol")){
-  
+    
   outputDir <- paste0(getwd(),"/heatmap_output")
   
-  if (!grepl(input$importName,gsub("^.*\\/","/",getwd())) ||
-        (nchar(pathwaysDir) - nchar(gsub("/","",pathwaysDir)) > 2))
-    stop(paste0("Please setwd to ",input$importName,
-                "_pipeline and ensure the pathways directory there is there as well"))
-  
+  if (!grepl(runSAM.obj$pipelineName,gsub("^.*\\/","",getwd()))) {
+      stop(paste0("Function must be run from pipeline output directory"))
+  }
   if(is.null(pathwaysDir) || !dir.exists(pathwaysDir) || 
        length(list.files(pathwaysDir)) == 0){
     stop("Provided input directory does not exist or is empty.")
@@ -27,7 +26,6 @@ visualizeOntology <- function(runSAM.obj,pathwaysDir,
   if(is.null(fileFormat) || !(fileFormat %in% c("geneid","symbol"))){
     stop("No file format provided, use \'geneid\' or \'symbol\'")
   }
-  
   if (!dir.exists(outputDir)) {
     cat("Creating output directory at ",outputDir,"\n",sep="")
     dir.create(outputDir, showWarnings = FALSE)
@@ -48,13 +46,16 @@ visualizeOntology <- function(runSAM.obj,pathwaysDir,
     xfigFull <- paste0(outputDir,"/",baseFilename,"-all.fig")
     csvFull <- paste0(outputDir,"/",baseFilename,"-filtered.csv")
     fcFull <- paste0(outputDir,"/",baseFilename,"-foldChange.csv")
-    fileList <- list(eps=epsFull,pdf=pdfFull,fc=fcFull,tiff=tiffFull,xfig=xfigFull,
-                      outputDir=outputDir,csv=csvFull,pathways=pathwaysDir)
+    fileList <- list(eps=epsFull,pdf=pdfFull,fc=fcFull,tiff=tiffFull,
+                     xfig=xfigFull,outputDir=outputDir,csv=csvFull,
+                     pathways=pathwaysDir)
     cat("### Processing",inputFile,"###\n")
-    preprocessedData <- heatmapPreprocess(input,inputFile,pathwaysDir,fileFormat,fileList)
+    preprocessedData <- heatmapPreprocess(runSAM.obj,inputFile,pathwaysDir,
+                                          fileFormat,fileList)
     if (typeof(preprocessedData)=="logical") { break }
     heatmapReady <- heatmapFC(preprocessedData,fileList,inputFile)
     if (typeof(heatmapReady)=="logical") { break }
-    heatmapMake(heatmapReady,preprocessedData$title,preprocessedData$cluster,fileList) 
+    heatmapMake(heatmapReady,preprocessedData$title,preprocessedData$cluster,
+                fileList) 
   }
 }

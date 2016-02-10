@@ -27,7 +27,7 @@ backgroundCutoff <- function(initializePipeline.obj,method=c("mloess","quantile"
   if(!missing(xlim.hi)) {
       plotsFile <- paste0("./",initializePipeline.obj$pipelineName,"_pipeline/",
                           initializePipeline.obj$pipelineName,"_",method,
-                          "_backgroundCutoff_",xlim.lo,"_",xlim.hi,".ps")
+                          "_backgroundCutoff_",xlim.lo,"-",xlim.hi,".ps")
       postscript(file=plotsFile,paper="letter")
       hist(logData,breaks=200,xlim=c(xlim.lo,xlim.hi), 
            main = "Maximum Illumination Across Arrays", 

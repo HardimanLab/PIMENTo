@@ -39,26 +39,28 @@ preprocessData <- function(inputFile,fileSheet=1,ntext=2,dataCol,symbolIndex=1,
     stop("Input file must be a .xlsx spreadsheet, comma-separated .csv, or 
          tab-seperated .txt")
   
-  if(ntext==1) {
-    name = 1
-    id = 1
-  }
-  
   pipelineName <- tools::file_path_sans_ext(inputFile)
   panels <- length(dataCol)
   format <- c(2,3)
-    
-  textCol <- 1:ntext
+
   labels <- colnames(X)[dataCol]
-  descStats <- X[,textCol]
-  colnames(descStats) <- colnames(X)[textCol]
+  textCol <- 1:ntext  
   data <- X[,dataCol]
+  
+  if(ntext==1) {
+    symbolIndex = 1
+    idIndex = 2
+    dataCol <- dataCol+1
+    descStats <- X[,rep(textCol,2)]
+  } else {
+    descStats <- X[,textCol]
+  }
   
   dataList = list()
   dataList$ntext=ntext
   dataList$dataCol=dataCol
-  dataList$id=X[,id]
-  dataList$idIndex=id
+  dataList$id=X[,idIndex]
+  dataList$idIndex=idIndex
   dataList$symbol=X[,symbolIndex]
   dataList$symbolIndex=symbolIndex
   dataList$descStats=descStats

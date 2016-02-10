@@ -44,7 +44,6 @@ runSAM <- function(backgroundSub.obj,response,delta) {
   # samr.compute.siggenes.table flips genename and geneid
   colnames(desc.dataSAM)[c(backgroundSub.obj$symbolInd,
                            backgroundSub.obj$idInd)] <- c("geneid","genenames")
-  print(colnames(desc.dataSAM))
   siggenes.table <- samr::samr.compute.siggenes.table(samr.obj,delta,desc.dataSAM,
                                                 delta.table,compute.localfdr=TRUE)
   
