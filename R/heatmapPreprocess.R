@@ -46,21 +46,11 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
   heatmapValues <- inputData$data[matchingGenes,inputData$dataCol]
   heatmapValues[heatmapValues==0] <- 1
   
-  median <- apply(heatmapValues,1,median)
-
-  removeIndices <- which(median < 15)
-  
-  # Extract desired values, check if desired best p-values
-  if (length(removeIndices) > 0) {
-    heatmapGenes <- heatmapGenes[-removeIndices,]
-    heatmapValues <- heatmapValues[-removeIndices,]
-    if (dim(heatmapValues)[1] == 0) {
-      warning(paste0("No genes from file ", inputFile, " have sufficient",
-                     " p-value or base mean. Moving to next file in subset."))
-      return(FALSE)
-    }
+  if (nrow(heatmapValues)[1] == 0) {
+    warning(paste0("No genes from file ", inputFile, " match those in dataset.",
+                    " Moving to next file in subset"))
   }
-  outputCSV <- cbind(heatmapGenes[,1:2],heatmapValues)
+  outputCSV <- cbind(heatmapGenes[,1:2],heatmapValue)
   write.csv(outputCSV,file=filenames$csv,row.names=F)
   return(list(genes=heatmapGenes,values=heatmapValues,title=graphTitle,
               cluster=cluster))

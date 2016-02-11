@@ -14,7 +14,7 @@
 #' @export
 
 backgroundCutoff <- function(initializePipeline.obj,method=c("mloess","quantile"),
-                             xlim.lo=0,xlim.hi) {
+                             xlim.lo=0,xlim.hi=0) {
 
   method <- match.arg(method)
   backgroundData <- switch(method,
@@ -24,7 +24,7 @@ backgroundCutoff <- function(initializePipeline.obj,method=c("mloess","quantile"
   geneMax <- apply(backgroundData,1,max)
   logData <- log2(geneMax)
   
-  if(!missing(xlim.hi)) {
+  if(xlim.hi != 0 | xlim.lo != 0) {
       plotsFile <- paste0("./",initializePipeline.obj$pipelineName,"_pipeline/",
                           initializePipeline.obj$pipelineName,"_",method,
                           "_backgroundCutoff_",xlim.lo,"-",xlim.hi,".ps")

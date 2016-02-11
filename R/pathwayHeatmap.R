@@ -29,9 +29,7 @@ pathwayHeatmap <- function(runSAM.obj,pathwaysDir,
   if (!dir.exists(outputDir)) {
     cat("Creating output directory at ",outputDir,"\n",sep="")
     dir.create(outputDir, showWarnings = FALSE)
-  }
-
-  
+  } 
   if(str_sub(pathwaysDir,-1)=="/"){
     pathwaysDir <- substr(pathwaysDir,1,nchar(pathwaysDir)-1)
   }
@@ -40,12 +38,12 @@ pathwayHeatmap <- function(runSAM.obj,pathwaysDir,
   for (inputFile in list.files(pathwaysDir)){
     
     baseFilename <- basename(file_path_sans_ext(inputFile))
-    epsFull <- paste0(outputDir,"/",baseFilename,"-all.eps")
-    pdfFull <- paste0(outputDir,"/",baseFilename,"-all.pdf")
-    tiffFull <- paste0(outputDir,"/",baseFilename,"-all.tiff")
-    xfigFull <- paste0(outputDir,"/",baseFilename,"-all.fig")
-    csvFull <- paste0(outputDir,"/",baseFilename,"-filtered.csv")
-    fcFull <- paste0(outputDir,"/",baseFilename,"-foldChange.csv")
+    epsFull <- paste0(outputDir,"/",pathwaysDir,"/",baseFilename,"-all.eps")
+    pdfFull <- paste0(outputDir,"/",pathwaysDir,"/",baseFilename,"-all.pdf")
+    tiffFull <- paste0(outputDir,"/",pathwaysDir,"/",baseFilename,"-all.tiff")
+    xfigFull <- paste0(outputDir,"/",pathwaysDir,"/",baseFilename,"-all.fig")
+    csvFull <- paste0(outputDir,"/",pathwaysDir,"/",baseFilename,"-filtered.csv")
+    fcFull <- paste0(outputDir,"/",pathwaysDir,"/",baseFilename,"-foldChange.csv")
     fileList <- list(eps=epsFull,pdf=pdfFull,fc=fcFull,tiff=tiffFull,
                      xfig=xfigFull,outputDir=outputDir,csv=csvFull,
                      pathways=pathwaysDir)

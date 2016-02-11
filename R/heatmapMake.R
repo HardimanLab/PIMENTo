@@ -82,5 +82,6 @@ heatmapMake <- function(heatmapData,graphTitle,cluster,filenames) {
             breaks=c(-7:-1/7,1:7/7),
             col=heatmapColors)
   invisible(dev.off())               # close the FIG device
-  cat("All plots have been created at ./heatmap_output/\n",sep="")
+  cat(paste0("All plots have been created at ",getwd(),"/heatmap_output/\n"),
+             sep="")
 }

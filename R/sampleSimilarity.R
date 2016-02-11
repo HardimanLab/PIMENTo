@@ -11,8 +11,8 @@ sampleSimilarity <- function(runSAM.obj) {
   groups = sapply(runSAM.obj$response,function(sample) 
     ifelse(sample == 1,"control","experiment"))
   
-  similarityFile=paste0("./",runSAM.obj$pipelineName,"_pipeline/",runSAM.obj$pipelineName,
-                        "_sampleSimilarity.ps")  
+  similarityFile=paste0("./",runSAM.obj$pipelineName,"_pipeline/",
+                        runSAM.obj$pipelineName,"_sampleSimilarity.ps")  
   postscript(file=similarityFile,paper="letter")
   
   ## Create heatmap plot of sample similarity
@@ -47,8 +47,8 @@ sampleSimilarity <- function(runSAM.obj) {
           ylab(paste0("PC2: ", round(percentVar[2] * 100), "% variance")) + 
           coord_fixed())
   
-  dev.off()
+  invisible(dev.off())
   
   cat("Plots of sample similarity created at ",similarityFile,sep="")
-  
+ 
 }
