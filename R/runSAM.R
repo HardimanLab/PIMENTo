@@ -36,9 +36,9 @@ runSAM <- function(backgroundSub.obj,response,delta) {
                  logged2=T)
   cat("Beginning SAM processing\n")
   capture.output(samr.obj <- samr::samr(listSAM,resp.type="Two class unpaired",
-                                  s0.perc=50,testStatistic="standard",nperms=100))
+                                  s0.perc=50,testStatistic="standard",nperms=200))
   cat("Calculating delta table\n")
-  capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=100))
+  capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=200))
   
   desc.dataSAM <- backgroundSub.obj$data
   # samr.compute.siggenes.table flips genename and geneid
