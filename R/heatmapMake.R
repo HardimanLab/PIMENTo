@@ -34,6 +34,7 @@ heatmapMake <- function(heatmapData,graphTitle,cluster,filenames) {
             Rowv=rowV,
             Colv=colV,
             breaks=c(-7:-1/7,1:7/7),
+            cexRow=1,cexCol=1,srtCol=45,
             col=heatmapColors)
   invisible(dev.off())               # close the EPS device
   
@@ -50,6 +51,7 @@ heatmapMake <- function(heatmapData,graphTitle,cluster,filenames) {
             Colv=colV,
             keysize=1,
             breaks=c(-7:-1/7,1:7/7),
+            cexRow=1,cexCol=1,srtCol=45,
             col=heatmapColors)
   invisible(dev.off())               # close the PDF device
   
@@ -65,6 +67,7 @@ heatmapMake <- function(heatmapData,graphTitle,cluster,filenames) {
             Rowv=rowV,
             Colv=colV,
             breaks=c(-7:-1/7,1:7/7),
+            cexRow=1,cexCol=1,srtCol=45,
             col=heatmapColors)
   invisible(dev.off())               # close the TIFF device
   
@@ -80,8 +83,10 @@ heatmapMake <- function(heatmapData,graphTitle,cluster,filenames) {
             Rowv=rowV,
             Colv=colV,
             breaks=c(-7:-1/7,1:7/7),
+            cexRow=1,cexCol=1,srtCol=45,
             col=heatmapColors)
   invisible(dev.off())               # close the FIG device
+
   cat(paste0("All plots have been created at ",getwd(),"/heatmap_output/\n"),
              sep="")
 }
