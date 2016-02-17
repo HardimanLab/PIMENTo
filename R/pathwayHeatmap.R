@@ -50,9 +50,9 @@ pathwayHeatmap <- function(runSAM.obj,pathwaysDir,
     cat("### Processing",inputFile,"###\n")
     preprocessedData <- heatmapPreprocess(runSAM.obj,inputFile,pathwaysDir,
                                           fileFormat,fileList)
-    if (typeof(preprocessedData)=="logical") { break }
+    if (typeof(preprocessedData)=="logical") { next }
     heatmapReady <- heatmapFC(preprocessedData,fileList,inputFile)
-    if (typeof(heatmapReady)=="logical") { break }
+    if (typeof(heatmapReady)=="logical") { next }
     heatmapMake(heatmapReady,preprocessedData$title,preprocessedData$cluster,
                 fileList) 
   }

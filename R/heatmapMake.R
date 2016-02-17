@@ -5,8 +5,8 @@ heatmapMake <- function(heatmapData,graphTitle,cluster,filenames) {
   heatmapColors <- c("#000033","#333366","#666699","#9999CC","#CCCCFF",
                       "#EEEEFF","#FFFFFF","#FFEEEE","#FFCCCC","#FF9999",
                       "#FF6666","#FF3333","#CC0000")
-  
-  if (grepl("gene",cluster)) {
+
+    if (grepl("gene",cluster)) {
     dendroStatus="row"
     colV=FALSE
     rowV=TRUE
@@ -19,7 +19,7 @@ heatmapMake <- function(heatmapData,graphTitle,cluster,filenames) {
     colV=TRUE
     rowV=TRUE
   }
-  
+
   # Plot the heatmaps to EPS, PDF, TIFF
   setEPS()
   postscript(filenames$eps)

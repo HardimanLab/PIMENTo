@@ -49,8 +49,9 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
   if (nrow(heatmapValues)[1] == 0) {
     warning(paste0("No genes from file ", inputFile, " match those in dataset.",
                     " Moving to next file in subset"))
+    return(FALSE)
   }
-  outputCSV <- cbind(heatmapGenes[,1:2],heatmapValue)
+  outputCSV <- cbind(heatmapGenes[,1:2],heatmapValues)
   write.csv(outputCSV,file=filenames$csv,row.names=F)
   return(list(genes=heatmapGenes,values=heatmapValues,title=graphTitle,
               cluster=cluster))

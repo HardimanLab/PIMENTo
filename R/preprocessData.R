@@ -30,7 +30,7 @@ preprocessData <- function(inputFile,fileSheet=1,ntext=2,dataCol,symbolIndex=1,
 
   ext <- tools::file_ext(inputFile)
   if (ext=="xlsx")
-    X <- openxlsx::read.xlsx(inputFile,sheet=fileSheet,stringsAsFactors=F)
+    X <- openxlsx::read.xlsx(inputFile,sheet=fileSheet)
   else if (ext=="csv")
     X <- read.csv(inputFile,header=TRUE,sep=",",stringsAsFactors=F)
   else if (ext=="txt")
@@ -72,27 +72,38 @@ preprocessData <- function(inputFile,fileSheet=1,ntext=2,dataCol,symbolIndex=1,
   }
   
   for (normType in c("raw","loess","quantile")) {
-    outputFile=paste0("./",pipelineName,"_pipeline/",pipelineName,"_",normType,".ps")
+    ps.outputFile=paste0("./",pipelineName,"_pipeline/",pipelineName,"_",normType,".ps")
+    pdf.outputFile=paste0("./",pipelineName,"_pipeline/",pipelineName,"_",normType,".pdf")
+
     if (normType == "raw") {
       dataNorm <- data
-      clusterFile=paste0("./",pipelineName,"_pipeline/",pipelineName,"_cluster.ps")
-      postscript(file=clusterFile,paper="letter")
+      ps.clusterFile=paste0("./",pipelineName,"_pipeline/",pipelineName,"_cluster.ps")
+      pdf.clusterFile=paste0("./",pipelineName,"_pipeline/",pipelineName,"_cluster.pdf")
+      
       dist <- dist(t(dataNorm))
+      
+      postscript(file=ps.clusterFile,paper="letter")
       plot(hclust(dist,method="ward.D2"))
       invisible(dev.off())
-      cat("Dendrogram of raw data plotted at",clusterFile,"\n")
-      cat("Raw data plots created at",outputFile,"\n")
+      
+      pdf(file=pdf.clusterFile,paper="letter")
+      plot(hclust(dist,method="ward.D2"))
+      invisible(dev.off())
+      
+      cat("Dendrogram of raw data plotted at",ps.clusterFile,"\n")
+      cat("Raw data plots created at",ps.outputFile,"\n")
     } else if (normType == "loess") {
       capture.output(dataNorm <- affy::normalize.loess(as.matrix(data)))
       dataList$mloess <- cbind(descStats,dataNorm)
-      cat("MLOESS normalized data plots created at",outputFile,"\n")
+      cat("MLOESS normalized data plots created at",ps.outputFile,"\n")
     } else if (normType == "quantile") {
       dataNorm <- limma::normalizeQuantiles(as.matrix(data))
       dataList$quantile <- cbind(descStats,dataNorm)
-      cat("Quantile normalized data plots created at",outputFile,"\n")
+      cat("Quantile normalized data plots created at",ps.outputFile,"\n")
     }
 
-    postscript(file=outputFile,paper="letter")
+    # Postscript output
+    postscript(file=ps.outputFile,paper="letter")
     par(mfrow=format,pty="s")
         
     for (i in 1:panels) {     
@@ -105,6 +116,22 @@ preprocessData <- function(inputFile,fileSheet=1,ntext=2,dataCol,symbolIndex=1,
       lines(c(0,18),c(0,0),col="cyan")
     }
     invisible(dev.off()) 
+    
+    # PDF output
+    pdf(file=pdf.outputFile,paper="letter")
+    par(mfrow=format,pty="s")
+    
+    for (i in 1:panels) {     
+      x<-as.numeric(dataNorm[,((i-1) %% panels)+1])
+      y<-as.numeric(dataNorm[,(i %% panels)+1])
+      A<-(log2(x)+log2(y))/2
+      M<-log2(y)-log2(x)
+      plot(A,M,xlim=c(4,14),ylim=c(-3,3),cex=1,pch=".",xlab=labels[((i-1) %% 
+           panels)+1],main=labels[(i %% panels)+1],font.main=1,cex.main=1)
+      lines(c(0,18),c(0,0),col="cyan")
+    }
+    invisible(dev.off()) 
+    
   }
   return(dataList)
   

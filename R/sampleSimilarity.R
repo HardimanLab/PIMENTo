@@ -11,9 +11,12 @@ sampleSimilarity <- function(runSAM.obj) {
   groups = sapply(runSAM.obj$response,function(sample) 
     ifelse(sample == 1,"control","experiment"))
   
-  similarityFile=paste0("./",runSAM.obj$pipelineName,"_pipeline/",
+  ps.similarityFile=paste0("./",runSAM.obj$pipelineName,"_pipeline/",
                         runSAM.obj$pipelineName,"_sampleSimilarity.ps")  
-  postscript(file=similarityFile,paper="letter")
+  pdf.similarityFile=paste0("./",runSAM.obj$pipelineName,"_pipeline/",
+                        runSAM.obj$pipelineName,"_sampleSimilarity.pdf")  
+  
+  postscript(file=ps.similarityFile,paper="letter")
   
   ## Create heatmap plot of sample similarity
   
@@ -33,7 +36,7 @@ sampleSimilarity <- function(runSAM.obj) {
   colours = colorRampPalette(rev(RColorBrewer::brewer.pal(9, "Blues")))(255)
   gplots::heatmap.2(distMatrix,symm=TRUE,trace="none",breaks=256,
             col=colours,margins=c(12,9),ColSideColors=sideColours[gr.col],
-            RowSideColors=sideColours[gr.row])
+            RowSideColors=sideColours[gr.row],cexRow=1,cexCol=1,srtCol=45)
 
   ## Create PCA plot of sample similarity
   
@@ -41,14 +44,29 @@ sampleSimilarity <- function(runSAM.obj) {
   percentVar = pca$sdev^2/sum(pca$sdev^2)
   d <- data.frame(PC1 = pca$x[,1], PC2 = pca$x[,2], group=groups)
   
-  print(ggplot(data = d,aes_string(x ="PC1",y="PC2",color="group"))+
-          geom_point(size=3) + 
+  p <- ggplot(data = d, aes_string(x = "PC1", y = "PC2", color = "group")) + 
+          geom_point() + geom_text(show.legend=FALSE, check_overlap=TRUE, 
+                                   hjust=0, vjust=0, aes(label = rownames(distMatrix))) + 
           xlab(paste0("PC1: ", round(percentVar[1] * 100), "% variance")) + 
           ylab(paste0("PC2: ", round(percentVar[2] * 100), "% variance")) + 
-          coord_fixed())
+          coord_fixed()
+  
+  gt <- ggplot_gtable(ggplot_build(p))
+  gt$layout$clip[gt$layout$name == "panel"] <- "off"
+  grid::grid.newpage()
+  grid::grid.draw(gt)
   
   invisible(dev.off())
+
+  pdf(file=pdf.similarityFile,paper="letter")
+  gplots::heatmap.2(distMatrix,symm=TRUE,trace="none",breaks=256,
+            col=colours,margins=c(12,9),ColSideColors=sideColours[gr.col],
+            RowSideColors=sideColours[gr.row],cexRow=1,cexCol=1,srtCol=45)
+  grid::grid.newpage()
+  grid::grid.draw(gt)
+
+  invisible(dev.off())
   
-  cat("Plots of sample similarity created at ",similarityFile,sep="")
+  cat("Plots of sample similarity created at ",ps.similarityFile,sep="")
  
 }

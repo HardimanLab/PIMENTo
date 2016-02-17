@@ -25,24 +25,45 @@ backgroundCutoff <- function(initializePipeline.obj,method=c("mloess","quantile"
   logData <- log2(geneMax)
   
   if(xlim.hi != 0 | xlim.lo != 0) {
-      plotsFile <- paste0("./",initializePipeline.obj$pipelineName,"_pipeline/",
+      ps.plotsFile <- paste0("./",initializePipeline.obj$pipelineName,"_pipeline/",
                           initializePipeline.obj$pipelineName,"_",method,
                           "_backgroundCutoff_",xlim.lo,"-",xlim.hi,".ps")
-      postscript(file=plotsFile,paper="letter")
+      pdf.plotsFile <- paste0("./",initializePipeline.obj$pipelineName,"_pipeline/",
+                          initializePipeline.obj$pipelineName,"_",method,
+                          "_backgroundCutoff_",xlim.lo,"-",xlim.hi,".pdf")
+
+      postscript(file=ps.plotsFile,paper="letter")
       hist(logData,breaks=200,xlim=c(xlim.lo,xlim.hi), 
            main = "Maximum Illumination Across Arrays", 
            xlab=expression('Illumination ('*log[2]*')'))
       invisible(dev.off())
-      cat("Histogram plots saved at",plotsFile,"\n")
+
+      pdf(file=pdf.plotsFile,paper="letter")
+      hist(logData,breaks=200,xlim=c(xlim.lo,xlim.hi), 
+           main = "Maximum Illumination Across Arrays", 
+           xlab=expression('Illumination ('*log[2]*')'))
+      invisible(dev.off())
+
+      cat("Histogram plots saved at",ps.plotsFile,"\n")
   }
   else {
-    plotsFile <- paste0("./",initializePipeline.obj$pipelineName,"_pipeline/",
+    ps.plotsFile <- paste0("./",initializePipeline.obj$pipelineName,"_pipeline/",
                         initializePipeline.obj$pipelineName,"_",method,
                         "_backgroundCutoff_full.ps")
-    postscript(file=plotsFile,paper="letter")
+    pdf.plotsFile <- paste0("./",initializePipeline.obj$pipelineName,"_pipeline/",
+                        initializePipeline.obj$pipelineName,"_",method,
+                        "_backgroundCutoff_full.pdf")
+
+    postscript(file=ps.plotsFile,paper="letter")
     hist(logData,breaks=200,main = "Maximum Illumination Across Arrays",
          xlab=expression('Illumination ('*log[2]*')'))
     invisible(dev.off())
-    cat("Histogram plots saved at",plotsFile,"\n")
+
+    pdf(file=pdf.plotsFile,paper="letter")
+    hist(logData,breaks=200,main = "Maximum Illumination Across Arrays",
+         xlab=expression('Illumination ('*log[2]*')'))
+    invisible(dev.off())
+
+    cat("Histogram plots saved at",ps.plotsFile,"\n")
   }
 }
