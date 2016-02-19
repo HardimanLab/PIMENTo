@@ -56,7 +56,7 @@ sampleSimilarity <- function(runSAM.obj) {
   grid::grid.newpage()
   grid::grid.draw(gt)
   
-  invisible(dev.off())
+  garbage <- dev.off()
 
   pdf(file=pdf.similarityFile,paper="letter")
   gplots::heatmap.2(distMatrix,symm=TRUE,trace="none",breaks=256,
@@ -65,7 +65,7 @@ sampleSimilarity <- function(runSAM.obj) {
   grid::grid.newpage()
   grid::grid.draw(gt)
 
-  invisible(dev.off())
+  garbage <- dev.off()
   
   cat("Plots of sample similarity created at ",ps.similarityFile,sep="")
  

@@ -36,13 +36,13 @@ backgroundCutoff <- function(initializePipeline.obj,method=c("mloess","quantile"
       hist(logData,breaks=200,xlim=c(xlim.lo,xlim.hi), 
            main = "Maximum Illumination Across Arrays", 
            xlab=expression('Illumination ('*log[2]*')'))
-      invisible(dev.off())
+      garbage <- dev.off()
 
       pdf(file=pdf.plotsFile,paper="letter")
       hist(logData,breaks=200,xlim=c(xlim.lo,xlim.hi), 
            main = "Maximum Illumination Across Arrays", 
            xlab=expression('Illumination ('*log[2]*')'))
-      invisible(dev.off())
+      garbage <- dev.off()
 
       cat("Histogram plots saved at",ps.plotsFile,"\n")
   }
@@ -57,12 +57,12 @@ backgroundCutoff <- function(initializePipeline.obj,method=c("mloess","quantile"
     postscript(file=ps.plotsFile,paper="letter")
     hist(logData,breaks=200,main = "Maximum Illumination Across Arrays",
          xlab=expression('Illumination ('*log[2]*')'))
-    invisible(dev.off())
+    garbage <- dev.off()
 
     pdf(file=pdf.plotsFile,paper="letter")
     hist(logData,breaks=200,main = "Maximum Illumination Across Arrays",
          xlab=expression('Illumination ('*log[2]*')'))
-    invisible(dev.off())
+    garbage <- dev.off()
 
     cat("Histogram plots saved at",ps.plotsFile,"\n")
   }

@@ -84,11 +84,11 @@ preprocessData <- function(inputFile,fileSheet=1,ntext=2,dataCol,symbolIndex=1,
       
       postscript(file=ps.clusterFile,paper="letter")
       plot(hclust(dist,method="ward.D2"))
-      invisible(dev.off())
+      garbage <- dev.off()
       
       pdf(file=pdf.clusterFile,paper="letter")
       plot(hclust(dist,method="ward.D2"))
-      invisible(dev.off())
+      garbage <- dev.off()
       
       cat("Dendrogram of raw data plotted at",ps.clusterFile,"\n")
       cat("Raw data plots created at",ps.outputFile,"\n")
@@ -115,7 +115,7 @@ preprocessData <- function(inputFile,fileSheet=1,ntext=2,dataCol,symbolIndex=1,
           panels)+1],main=labels[(i %% panels)+1],font.main=1,cex.main=1)
       lines(c(0,18),c(0,0),col="cyan")
     }
-    invisible(dev.off()) 
+    garbage <- dev.off() 
     
     # PDF output
     pdf(file=pdf.outputFile,paper="letter")
@@ -130,7 +130,7 @@ preprocessData <- function(inputFile,fileSheet=1,ntext=2,dataCol,symbolIndex=1,
            panels)+1],main=labels[(i %% panels)+1],font.main=1,cex.main=1)
       lines(c(0,18),c(0,0),col="cyan")
     }
-    invisible(dev.off()) 
+    garbage <- dev.off() 
     
   }
   return(dataList)
