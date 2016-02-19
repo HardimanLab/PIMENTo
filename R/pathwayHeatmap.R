@@ -30,14 +30,14 @@ pathwayHeatmap <- function(runSAM.obj,pathwaysDir,
     cat("Creating output directory at ",outputDir,"\n",sep="")
     dir.create(outputDir, showWarnings = FALSE)
   } 
-  if(str_sub(pathwaysDir,-1)=="/"){
+  if(stringr::str_sub(pathwaysDir,-1)=="/"){
     pathwaysDir <- substr(pathwaysDir,1,nchar(pathwaysDir)-1)
   }
   
 
   for (inputFile in list.files(pathwaysDir)){
     
-    baseFilename <- basename(file_path_sans_ext(inputFile))
+    baseFilename <- basename(tools::file_path_sans_ext(inputFile))
     epsFull <- paste0(outputDir,"/",pathwaysDir,"/",baseFilename,"-all.eps")
     pdfFull <- paste0(outputDir,"/",pathwaysDir,"/",baseFilename,"-all.pdf")
     tiffFull <- paste0(outputDir,"/",pathwaysDir,"/",baseFilename,"-all.tiff")
