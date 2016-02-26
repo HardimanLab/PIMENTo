@@ -11,8 +11,8 @@ xlim.lo=0, xlim.hi)
 \item{initializePipeline.obj}{Object returned from call to 
 initializePipeline}
 
-\item{method}{Type of normalization to use: "quantile" or "q" for quantile 
-normalization; "mloess" or "m" for MLOESS normalization}
+\item{method}{Type of normalization to use: "quantile" for quantile 
+normalization; "mloess" for MLOESS normalization}
 
 \item{xlim.lo}{Lower bound on X for histogram plot (binary logarithm)}
 

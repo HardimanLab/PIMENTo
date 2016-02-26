@@ -27,16 +27,24 @@ runSAM <- function(backgroundSub.obj,response,delta) {
   
   if(length(response) != ncol(dataSAM))
     stop("Number of responses does not match number of samples.")
-  if(max(response) > 2 || min(response) < 1)
-    stop("Arrays can only belong to control (1) or experimental (2).")
   if(missing(delta))
     stop("Provide a delta tuning parameter")
   
   listSAM = list(x=log.dataSAM,y=response,genenames=genenames,geneid=geneid,
                  logged2=T)
   cat("Beginning SAM processing\n")
-  capture.output(samr.obj <- samr::samr(listSAM,resp.type="Two class unpaired",
-                                  s0.perc=50,testStatistic="standard",nperms=200))
+  
+  if(length(unique(response)) == 2) {
+    capture.output(samr.obj <- samr::samr(listSAM,resp.type="Two class unpaired",
+                                          s0.perc=50,testStatistic="standard",
+                                          nperms=200))
+  } else if (length(unique(response)) > 2) {
+    capture.output(samr.obj <- samr::samr(listSAM,resp.type="Multiclass",
+                                          s0.perc=50,testStatistic="standard",
+                                          nperms=200))
+  } else {
+    stop("Arrays can only belong to control (1) or experimental (2).")
+  }
   cat("Calculating delta table\n")
   capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=200))
   

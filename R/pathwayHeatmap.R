@@ -11,8 +11,7 @@
 #' "geneid" or "symbol"
 #' @export
 
-pathwayHeatmap <- function(runSAM.obj,pathwaysDir,
-                              fileFormat=c("geneid","symbol")){
+pathwayHeatmap <- function(runSAM.obj,pathwaysDir,fileFormat){
     
   outputDir <- paste0(getwd(),"/heatmap_output")
   
@@ -54,6 +53,6 @@ pathwayHeatmap <- function(runSAM.obj,pathwaysDir,
     heatmapReady <- heatmapFC(preprocessedData,fileList,inputFile)
     if (typeof(heatmapReady)=="logical") { next }
     heatmapMake(heatmapReady,preprocessedData$title,preprocessedData$cluster,
-                fileList) 
+                fileList,pathwaysDir) 
   }
 }

@@ -1,12 +1,12 @@
 #' @title Perform background subtraction on normalized data
 #' @description Remove all genes that have an maximum intensity level below that
 #' of the provided cutoff.
-#' @usage backgroundSubtraction(initializePipeline.obj, 
+#' @usage backgroundSubtraction(preprocessData.obj, 
 #' method=c("mloess","quantile"), cutoff)
-#' @param initializePipeline.obj Object returned from call to 
-#' initializePipeline
-#' @param method Type of normalization to use: "quantile" or "q" for quantile 
-#' normalization; "mloess" or "m" for mloess normalization
+#' @param preprocessData.obj Object returned from call to 
+#' preprocessData
+#' @param method Type of normalization to use: "quantile" for quantile 
+#' normalization; "mloess" for MLOESS normalization
 #' @param cutoff The cutoff value (binary logarithm) identified through
 #' backgroundCutoff
 #' @return A list with components
@@ -23,30 +23,30 @@
 #' method}
 #' @export
 
-backgroundSubtraction <- function(initializePipeline.obj,
-                                  method=c("mloess","quantile"),cutoff) {
+backgroundSubtraction <- function(preprocessData.obj,method,cutoff) {
 
   if(missing(cutoff))
     stop("Must submit cutoff value for background subtraction.")
   
-  method <- tryCatch(match.arg(method), error=function(e){
-    stop("The provided method of", method, "is not one of the avaiable methods.",
-      " Use 'quantile' or 'mloess'",call.=FALSE)
-  })
-  if(method=="quantile")
-    backgroundData <- initializePipeline.obj$quantile[,initializePipeline.obj$dataCol]
-  else if (method=="mloess")
-    backgroundData <- initializePipeline.obj$mloess[,initializePipeline.obj$dataCol]
+  if (grepl("quantile",method))
+    backgroundData <- preprocessData.obj$quantile[,preprocessData.obj$dataCol]
+  else if (grepl("mloess",method))
+    backgroundData <- preprocessData.obj$mloess[,preprocessData.obj$dataCol]
+  else
+    stop("Input argument 'method' must be either 'quantile' or 'mloess'")
   
-  descStats <- initializePipeline.obj$descStats
   geneMax <- apply(backgroundData,1,max)
   keepIndices <- !(geneMax < 2^cutoff)
-  descStats <- descStats[keepIndices,]
+  descStats <- preprocessData.obj$descStats[keepIndices,]
   subtractedData <- backgroundData[keepIndices,]
-  initializePipeline.obj$data <- cbind(descStats,subtractedData)
-  initializePipeline.obj$mloess <- NULL
-  initializePipeline.obj$quantile <- NULL
+  
+  preprocessData.obj$symbol <- preprocessData.obj$symbol[keepIndices]
+  preprocessData.obj$id <- preprocessData.obj$id[keepIndices]
+  preprocessData.obj$data <- cbind(descStats,subtractedData)
+  preprocessData.obj$descStats <- descStats
+  preprocessData.obj$mloess <- NULL
+  preprocessData.obj$quantile <- NULL
   
 
-  return(initializePipeline.obj)
+  return(preprocessData.obj)
 }

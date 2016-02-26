@@ -3,8 +3,8 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
   # Read in contents of current file
   geneList <- readLines(paste0(pathwaysDir,"/",inputFile))
   
-  if (geneList[1] %in% c("gene","sample","both")) {
-    cluster <- geneList[1]
+  if (grepl("gene|sample|both",tolower(geneList[1]))) {
+    cluster <- tolower(geneList[1])
     geneList <- geneList[-1]
   } else {
     warning(paste0("No tree status indicated for ",inputFile,", will skip this",
@@ -12,8 +12,7 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
     return(FALSE)
   }
   # Graph title is now first line
-  if ((!geneList[1] %in% inputData$data[,1]) &&
-        !(geneList[1] %in% inputData$data[,2])) {
+  if (!geneList[1] %in% inputData$data[,1:inputData$ntext]) {
     graphTitle <- geneList[1]
     geneList <- geneList[-1]
   } else{

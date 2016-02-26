@@ -12,8 +12,11 @@ heatmapFC <- function(data,filenames,inputFile){
   # Write out to CSV the fold-change data
   processedData <- data.frame(sigGenesID,foldChange,row.names=1)
   write.csv(processedData,file=filenames$fc)
-  cat(paste0("CSV of fold-change values has been created at ",getwd(),"/heatmap_output/\n"),
-             sep="")
+  outputDirStr <- regexpr("([^/]+/+[^/]+/+[^/]+)/*$",filenames$fc)
+  outputDirStr <- substr(filenames$fc,outputDirStr,
+                         attr(outputDirStr,"match.length")+outputDirStr)
+  cat(paste0("CSV of fold-change values has been created at ./",outputDirStr,
+             "\n"),sep="")
   
   if (dim(foldChange)[1] == 1){
     print(paste0("Only one gene found to be significant - No heatmap creation"))

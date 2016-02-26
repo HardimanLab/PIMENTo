@@ -34,9 +34,12 @@ sampleSimilarity <- function(runSAM.obj) {
   gr.col <- cutree(cl.col, 2)
   sideColours <- c("red","blue")
   colours = colorRampPalette(rev(RColorBrewer::brewer.pal(9, "Blues")))(255)
-  gplots::heatmap.2(distMatrix,symm=TRUE,trace="none",breaks=256,
-            col=colours,margins=c(12,9),ColSideColors=sideColours[gr.col],
-            RowSideColors=sideColours[gr.row],cexRow=1,cexCol=1,srtCol=45)
+  garbageCollect <- capture.output(
+    gplots::heatmap.2(distMatrix,symm=TRUE,trace="none",breaks=256,col=colours,
+                      margins=c(12,9),cexRow=1,cexCol=1,srtCol=45,
+                      ColSideColors=sideColours[gr.col],
+                      RowSideColors=sideColours[gr.row])
+    )
 
   ## Create PCA plot of sample similarity
   
@@ -56,16 +59,19 @@ sampleSimilarity <- function(runSAM.obj) {
   grid::grid.newpage()
   grid::grid.draw(gt)
   
-  garbage <- dev.off()
+  dev.off()
 
   pdf(file=pdf.similarityFile,paper="letter")
-  gplots::heatmap.2(distMatrix,symm=TRUE,trace="none",breaks=256,
-            col=colours,margins=c(12,9),ColSideColors=sideColours[gr.col],
-            RowSideColors=sideColours[gr.row],cexRow=1,cexCol=1,srtCol=45)
+  garbageCollect <- capture.output(
+    gplots::heatmap.2(distMatrix,symm=TRUE,trace="none",breaks=256,col=colours,
+                      margins=c(12,9),cexRow=1,cexCol=1,srtCol=45,
+                      ColSideColors=sideColours[gr.col],
+                      RowSideColors=sideColours[gr.row])
+    )
   grid::grid.newpage()
   grid::grid.draw(gt)
 
-  garbage <- dev.off()
+  dev.off()
   
   cat("Plots of sample similarity created at ",ps.similarityFile,sep="")
  

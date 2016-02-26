@@ -11,8 +11,8 @@ method=c("mloess","quantile"), cutoff)
 \item{initializePipeline.obj}{Object returned from call to 
 initializePipeline}
 
-\item{method}{Type of normalization to use: "quantile" or "q" for quantile 
-normalization; "mloess" or "m" for mloess normalization}
+\item{method}{Type of normalization to use: "quantile" for quantile 
+normalization; "mloess" for MLOESS normalization}
 
 \item{cutoff}{The cutoff value (binary logarithm) identified through
 backgroundCutoff}
