@@ -38,7 +38,13 @@ heatmapMake <- function(heatmapData,graphTitle,cluster,filenames,pathwaysDir) {
             col=heatmapColors))
   garbage <- dev.off()               # close the EPS device
   
-  pdf(filenames$pdf,height=11,width=8.5)
+
+  lhei = c(0.5,0.75,4)
+  lwid = c(1.5,4)
+  lmat = rbind(c(4,0),
+	       c(0,3),
+               c(2,1))
+  pdf(filenames$pdf,height=17,width=8.5)
   garbageCollect <- capture.output(heatmap.2(heatmapData,
             hclustfun=function(x) hclust(x,method="ward.D2"),
             distfun=function(x) dist(x,method="euclidean"),
@@ -52,6 +58,7 @@ heatmapMake <- function(heatmapData,graphTitle,cluster,filenames,pathwaysDir) {
             keysize=1,
             breaks=c(-7:-1/7,1:7/7),
             cexRow=1,cexCol=1,srtCol=45,
+	    lmat = lmat, lwid = lwid, lhei = lhei,
             col=heatmapColors))
   garbage <- dev.off()               # close the PDF device
   
