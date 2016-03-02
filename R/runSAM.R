@@ -68,7 +68,7 @@ runSAM <- function(backgroundSub.obj,response,delta) {
                                              abs(as.numeric(allSiggenes[,4])),
                                              decreasing=TRUE),]
   write.csv(ordered.allSiggenes,file=siggenesFile,row.names=FALSE)
-  cat("Significant gene list available at ./",siggenesFile,sep="")
+  cat("Significant gene list available at ./",siggenesFile,"\n"sep="")
   
   colnames(ordered.allSiggenes) <- make.names(colnames(allSiggenes))
 
