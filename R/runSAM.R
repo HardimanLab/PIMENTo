@@ -75,7 +75,7 @@ runSAM <- function(backgroundSub.obj,response,delta) {
   sam.return.list <- list(siggenesTable=ordered.allSiggenes,data=desc.dataSAM,
               ntext=backgroundSub.obj$ntext,
               pipelineName=backgroundSub.obj$pipelineName,
-              response=response,dataCol=backgroundSub.obj$dataCol))
+              response=response,dataCol=backgroundSub.obj$dataCol)
 
   sampleSimilarity(sam.return.list)
 
