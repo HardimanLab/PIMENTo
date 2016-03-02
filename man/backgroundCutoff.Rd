@@ -4,12 +4,12 @@
 \alias{backgroundCutoff}
 \title{Visualize arrays to identify cutoff for background subtraction}
 \usage{
-backgroundCutoff(initializePipeline.obj, method=c("loess","quantile"), 
+backgroundCutoff(preprocessData.obj, method=c("loess","quantile"), 
 xlim.lo=0, xlim.hi)
 }
 \arguments{
-\item{initializePipeline.obj}{Object returned from call to 
-initializePipeline}
+\item{preprocessData.obj}{Object returned from call to 
+preprocessData}
 
 \item{method}{Type of normalization to use: "quantile" for quantile 
 normalization; "mloess" for MLOESS normalization}
