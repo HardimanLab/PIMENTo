@@ -71,9 +71,13 @@ runSAM <- function(backgroundSub.obj,response,delta) {
   cat("Significant gene list available at ./",siggenesFile,sep="")
   
   colnames(ordered.allSiggenes) <- make.names(colnames(allSiggenes))
-    
-  return(list(siggenesTable=ordered.allSiggenes,data=desc.dataSAM,
+
+  sam.return.list <- list(siggenesTable=ordered.allSiggenes,data=desc.dataSAM,
               ntext=backgroundSub.obj$ntext,
               pipelineName=backgroundSub.obj$pipelineName,
               response=response,dataCol=backgroundSub.obj$dataCol))
+
+  sampleSimilarity(sam.return.list)
+
+  return(sam.return.list)
 }
