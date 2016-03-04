@@ -1,10 +1,8 @@
 heatmapFC <- function(data,filenames,inputFile){
   
   heatmapValues <- data$values
-  print(head(heatmapValues))
   baseMedians <- apply(heatmapValues,1,median)
   sigGenesID <- make.names(data$genes[,data$methodIndex],unique=TRUE)
-  print(head(sigGenesID))
   
   log2spaceDiff <- log2(heatmapValues) - log2(baseMedians)
   
