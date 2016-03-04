@@ -18,7 +18,7 @@ sampleSimilarity <- function(runSAM.obj) {
   postscript(file=ps.similarityFile,paper="letter")
   
   ## Create heatmap plot of sample similarity
-  if ("classCompareCols" %in% names(mouse.sam.first.AvsB)) {
+  if ("classCompareCols" %in% names(runSAM.obj)) {
     normData <- as.matrix(runSAM.obj$data[,runSAM.obj$classCompareCols])
   }
   else {
