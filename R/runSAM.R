@@ -85,12 +85,12 @@ runSAM <- function(backgroundSub.obj,classCompareCols,response,delta) {
   }
   else {
     ntext <- backgroundSub.obj$ntext
-    subsetClassCompareCols <- c((ntext+1):(ntext+1+length(classCompareCols)))
+    subsetClassCompareCols <- c((ntext+1):(ntext+length(classCompareCols)))
     sam.return.list <- list(siggenesTable=ordered.allSiggenes,data=desc.dataSAM,
               ntext=backgroundSub.obj$ntext,
               pipelineName=backgroundSub.obj$pipelineName,
               response=response,dataCol=backgroundSub.obj$dataCol,
-              classCompareCols=classCompareCols,idIndex=backgroundSub.obj$idIndex,
+              classCompareCols=subsetClassCompareCols,idIndex=backgroundSub.obj$idIndex,
               symbolIndex=backgroundSub.obj$symbolIndex)
   }
   sampleSimilarity(sam.return.list)
