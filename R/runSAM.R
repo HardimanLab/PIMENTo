@@ -48,7 +48,7 @@ runSAM <- function(backgroundSub.obj,response,delta) {
   cat("Calculating delta table\n")
   capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=200))
   
-  desc.dataSAM <- backgroundSub.obj$data
+  desc.dataSAM <- data.frame(backgroundSub.obj$descStats,dataSAM)
   # samr.compute.siggenes.table flips genename and geneid
   colnames(desc.dataSAM)[c(backgroundSub.obj$symbolIndex,
                            backgroundSub.obj$idInd)] <- c("geneid","genenames")
