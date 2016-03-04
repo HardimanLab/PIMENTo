@@ -18,9 +18,14 @@
 #' \item{data}{Data frame of chosen normalization method data}
 #' @export
 
-runSAM <- function(backgroundSub.obj,response,delta) {
-   
-  dataSAM <- backgroundSub.obj$data[,backgroundSub.obj$dataCol]
+runSAM <- function(backgroundSub.obj,classCompareCols,response,delta) {
+  
+  if (missing(classCompareCols)) {
+    dataSAM <- backgroundSub.obj$data[,backgroundSub.obj$dataCol]
+  }
+  else {
+    dataSAM <- backgroundSub.obj$data[,classCompareCols]
+  }
   log.dataSAM <- log2(dataSAM)
   genenames <- as.data.frame(backgroundSub.obj$symbol)
   geneid <- as.data.frame(backgroundSub.obj$id)
@@ -72,11 +77,19 @@ runSAM <- function(backgroundSub.obj,response,delta) {
   
   colnames(ordered.allSiggenes) <- make.names(colnames(allSiggenes))
 
-  sam.return.list <- list(siggenesTable=ordered.allSiggenes,data=desc.dataSAM,
+  if (missing(classCompareCols)) {
+    sam.return.list <- list(siggenesTable=ordered.allSiggenes,data=desc.dataSAM,
               ntext=backgroundSub.obj$ntext,
               pipelineName=backgroundSub.obj$pipelineName,
               response=response,dataCol=backgroundSub.obj$dataCol)
-
+  else {
+    subsetClassCompareCols <- c((ntext+1):(ntext+1+length(classCompareCols)))
+    sam.return.list <- list(siggenesTable=ordered.allSiggenes,data=desc.dataSAM,
+              ntext=backgroundSub.obj$ntext,
+              pipelineName=backgroundSub.obj$pipelineName,
+              response=response,dataCol=backgroundSub.obj$dataCol,
+              classCompareCols=classCompareCols)
+  }
   sampleSimilarity(sam.return.list)
 
   return(sam.return.list)
