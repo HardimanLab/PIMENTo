@@ -34,23 +34,22 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
   if(method == "symbol") {
     heatmapID <- toupper(inputData$data$Symbol)
     geneList <- toupper(geneList)
+    methodIndex <- inputData$symbolIndex
   }
   else if (method == "geneid") {
     heatmapID <- toupper(inputData$data$GeneID)
+    methodIndex <- inputData$idIndex
   }
   
   # Filter down to desired genes
   matchingGenes <- na.omit(match(geneList,heatmapID))
   heatmapGenes <- inputData$data[matchingGenes,]
-  print(head(inputData$data))
-  print(head(matchingGenes))
   if ("classCompareCols" %in% names(inputData)) {
     heatmapValues <- inputData$data[matchingGenes,inputData$classCompareCols]
   }
   else {
     heatmapValues <- inputData$data[matchingGenes,inputData$dataCol]
   }
-  print(head(heatmapValues))
   heatmapValues[heatmapValues==0] <- 1
   
   if (nrow(heatmapValues)[1] == 0) {
@@ -61,5 +60,5 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
   outputCSV <- cbind(heatmapGenes[,1:2],heatmapValues)
   write.csv(outputCSV,file=filenames$csv,row.names=F)
   return(list(genes=heatmapGenes,values=heatmapValues,title=graphTitle,
-              cluster=cluster))
+              cluster=cluster,methodIndex=methodIndex))
 }
