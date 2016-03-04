@@ -84,6 +84,7 @@ runSAM <- function(backgroundSub.obj,classCompareCols,response,delta) {
               response=response,dataCol=backgroundSub.obj$dataCol)
   }
   else {
+    ntext <- backgroundSub.obj$ntext
     subsetClassCompareCols <- c((ntext+1):(ntext+1+length(classCompareCols)))
     sam.return.list <- list(siggenesTable=ordered.allSiggenes,data=desc.dataSAM,
               ntext=backgroundSub.obj$ntext,
