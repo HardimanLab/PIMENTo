@@ -27,8 +27,8 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
                showWarnings = FALSE)
   }
 
-  colnames(inputData$data)[1] <- "Symbol"
-  colnames(inputData$data)[2] <- "GeneID"
+  colnames(inputData$data)[inputData$symbolIndex] <- "Symbol"
+  colnames(inputData$data)[inputData$idIndex] <- "GeneID"
 
   # Extract gene name and ID
   if(method == "symbol") {
@@ -42,12 +42,15 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
   # Filter down to desired genes
   matchingGenes <- na.omit(match(geneList,heatmapID))
   heatmapGenes <- inputData$data[matchingGenes,]
+  print(head(inputData$data))
+  print(head(matchingGenes))
   if ("classCompareCols" %in% names(inputData)) {
     heatmapValues <- inputData$data[matchingGenes,inputData$classCompareCols]
   }
   else {
     heatmapValues <- inputData$data[matchingGenes,inputData$dataCol]
   }
+  print(head(heatmapValues))
   heatmapValues[heatmapValues==0] <- 1
   
   if (nrow(heatmapValues)[1] == 0) {

@@ -89,7 +89,8 @@ runSAM <- function(backgroundSub.obj,classCompareCols,response,delta) {
               ntext=backgroundSub.obj$ntext,
               pipelineName=backgroundSub.obj$pipelineName,
               response=response,dataCol=backgroundSub.obj$dataCol,
-              classCompareCols=classCompareCols)
+              classCompareCols=classCompareCols,idIndex=backgroundSub.obj$idIndex,
+              symbolIndex=backgroundSub.obj$symbolIndex)
   }
   sampleSimilarity(sam.return.list)
 
