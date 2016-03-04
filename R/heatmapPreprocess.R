@@ -42,7 +42,11 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
   # Filter down to desired genes
   matchingGenes <- na.omit(match(geneList,heatmapID))
   heatmapGenes <- inputData$data[matchingGenes,]
-  heatmapValues <- inputData$data[matchingGenes,inputData$dataCol]
+  if ("classCompareCols" %in% names(inputData)) {
+    heatmapValues <- inputData$data[matchingGenes,inputData$classCompareCols]
+  else {
+    heatmapValues <- inputData$data[matchingGenes,inputData$dataCol]
+  }
   heatmapValues[heatmapValues==0] <- 1
   
   if (nrow(heatmapValues)[1] == 0) {
