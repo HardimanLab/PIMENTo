@@ -44,6 +44,7 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
   heatmapGenes <- inputData$data[matchingGenes,]
   if ("classCompareCols" %in% names(inputData)) {
     heatmapValues <- inputData$data[matchingGenes,inputData$classCompareCols]
+  }
   else {
     heatmapValues <- inputData$data[matchingGenes,inputData$dataCol]
   }
