@@ -18,13 +18,19 @@
 #' \item{data}{Data frame of chosen normalization method data}
 #' @export
 
-runSAM <- function(backgroundSub.obj,classCompareCols,response,delta) {
+runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,response,delta) {
   
+  if ((missing(classCompareCols) & !missing(classCompareName)) | 
+       (missing(classCompareName) & !missing(classCompareCols))) {
+    stop("Cannot have classCompareCols set without classCompareName
+           and vice-versa")
+  }
+
   if (missing(classCompareCols)) {
     dataSAM <- backgroundSub.obj$data[,backgroundSub.obj$dataCol]
   }
   else {
-    dataSAM <- backgroundSub.obj$data[,classCompareCols]
+      dataSAM <- backgroundSub.obj$data[,classCompareCols]
   }
   log.dataSAM <- log2(dataSAM)
   genenames <- as.data.frame(backgroundSub.obj$symbol)
@@ -66,8 +72,14 @@ runSAM <- function(backgroundSub.obj,classCompareCols,response,delta) {
   if (sum(nrow(siggenes.table$genes.up),nrow(siggenes.table$genes.lo)) < 1)
     stop("No significant genes at provided delta")
   
-  siggenesFile=paste0(backgroundSub.obj$pipelineName,"_pipeline/",
-                      backgroundSub.obj$pipelineName,"_sigGenes.csv")
+  if (exists("classCompareName"))
+    siggenesFile=paste0(backgroundSub.obj$pipelineName,"_pipeline/",
+                        backgroundSub.obj$pipelineName,"_sigGenes-",
+                        classCompareName,".csv")
+  else
+    siggenesFile=paste0(backgroundSub.obj$pipelineName,"_pipeline/",
+                        backgroundSub.obj$pipelineName,"_sigGenes.csv")
+    
   allSiggenes <- as.matrix(rbind(siggenes.table$genes.up,siggenes.table$genes.lo))
   ordered.allSiggenes <- allSiggenes[order(-(as.numeric(allSiggenes[,8])),
                                              abs(as.numeric(allSiggenes[,4])),
@@ -91,7 +103,8 @@ runSAM <- function(backgroundSub.obj,classCompareCols,response,delta) {
               pipelineName=backgroundSub.obj$pipelineName,
               response=response,dataCol=backgroundSub.obj$dataCol,
               classCompareCols=subsetClassCompareCols,idIndex=backgroundSub.obj$idIndex,
-              symbolIndex=backgroundSub.obj$symbolIndex)
+              symbolIndex=backgroundSub.obj$symbolIndex,
+              classCompareName=classCompareName)
   }
   sampleSimilarity(sam.return.list)
 

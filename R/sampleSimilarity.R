@@ -10,11 +10,21 @@ sampleSimilarity <- function(runSAM.obj) {
   groups = sapply(runSAM.obj$response,function(sample) 
     ifelse(sample == 1,"control","experiment"))
   
-  ps.similarityFile=paste0("./",runSAM.obj$pipelineName,"_pipeline/",
-                        runSAM.obj$pipelineName,"_sampleSimilarity.ps")  
-  pdf.similarityFile=paste0("./",runSAM.obj$pipelineName,"_pipeline/",
-                        runSAM.obj$pipelineName,"_sampleSimilarity.pdf")  
-  
+  if ("classCompareName" %in% names(runSAM.obj)) {
+    ps.similarityFile=paste0("./",runSAM.obj$pipelineName,"_pipeline/",
+                          runSAM.obj$pipelineName,"_sampleSimilarity-",
+                          runSAM.obj$classCompareName,".ps")  
+    pdf.similarityFile=paste0("./",runSAM.obj$pipelineName,"_pipeline/",
+                          runSAM.obj$pipelineName,"_sampleSimilarity-",
+                          runSAM.obj$classCompareName,".pdf")  
+  }
+  else {
+    ps.similarityFile=paste0("./",runSAM.obj$pipelineName,"_pipeline/",
+                          runSAM.obj$pipelineName,"_sampleSimilarity.ps")  
+    pdf.similarityFile=paste0("./",runSAM.obj$pipelineName,"_pipeline/",
+                          runSAM.obj$pipelineName,"_sampleSimilarity.pdf")  
+  }
+
   postscript(file=ps.similarityFile,paper="letter")
   
   ## Create heatmap plot of sample similarity
