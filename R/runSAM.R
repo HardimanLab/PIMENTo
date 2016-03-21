@@ -18,7 +18,7 @@
 #' \item{data}{Data frame of chosen normalization method data}
 #' @export
 
-runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,response,delta) {
+runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,response) {
   
   if ((missing(classCompareCols) & !missing(classCompareName)) | 
        (missing(classCompareName) & !missing(classCompareCols))) {
@@ -38,8 +38,6 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,response,
   
   if(length(response) != ncol(dataSAM))
     stop("Number of responses does not match number of samples.")
-  if(missing(delta))
-    stop("Provide a delta tuning parameter")
   
   listSAM = list(x=log.dataSAM,y=response,genenames=genenames,geneid=geneid,
                  logged2=T)
@@ -49,16 +47,12 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,response,
     capture.output(samr.obj <- samr::samr(listSAM,resp.type="Two class unpaired",
                                           s0.perc=50,testStatistic="standard",
                                           nperms=200))
-  } else if (length(unique(response)) > 2) {
-    capture.output(samr.obj <- samr::samr(listSAM,resp.type="Multiclass",
-                                          s0.perc=50,testStatistic="standard",
-                                          nperms=200))
   } else {
     stop("Arrays can only belong to control (1) or experimental (2).")
   }
   cat("Calculating delta table\n")
-  capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=200))
-  
+  capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=1000))
+  delta <- delta.table[which(delta.table[,5] <= 0.1)[1],1]
   desc.dataSAM <- data.frame(backgroundSub.obj$descStats,dataSAM)
   # samr.compute.siggenes.table flips genename and geneid
   colnames(desc.dataSAM)[c(backgroundSub.obj$symbolIndex,
@@ -66,7 +60,7 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,response,
   siggenes.table <- samr::samr.compute.siggenes.table(samr.obj,delta,desc.dataSAM,
                                                 delta.table,compute.localfdr=TRUE)
   
-  cat("\nSAM Results:\nDelta:",delta,"\nNo. of significantly down regulated genes:",
+  cat("\nSAM Results:\nOptimal delta:",delta,"\nNo. of significantly down regulated genes:",
       siggenes.table$ngenes.lo,"\nNo. of significantly up regulated genes:",
       siggenes.table$ngenes.up,"\n\n")
   if (sum(nrow(siggenes.table$genes.up),nrow(siggenes.table$genes.lo)) < 1)
