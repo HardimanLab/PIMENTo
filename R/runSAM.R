@@ -18,7 +18,8 @@
 #' \item{data}{Data frame of chosen normalization method data}
 #' @export
 
-runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,response) {
+runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
+                   fdr.cutoff=0.1,response) {
   
   if ((missing(classCompareCols) & !missing(classCompareName)) | 
        (missing(classCompareName) & !missing(classCompareCols))) {
@@ -52,7 +53,7 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,response)
   }
   cat("Calculating delta table\n")
   capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=1000))
-  delta <- delta.table[which(delta.table[,5] <= 0.1)[1],1]
+  delta <- delta.table[which(delta.table[,5] <= fdr.cutoff)[1],1]
   desc.dataSAM <- data.frame(backgroundSub.obj$descStats,dataSAM)
   # samr.compute.siggenes.table flips genename and geneid
   colnames(desc.dataSAM)[c(backgroundSub.obj$symbolIndex,
