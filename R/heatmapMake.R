@@ -62,21 +62,23 @@ heatmapMake <- function(heatmapData,graphTitle,cluster,filenames,pathwaysDir) {
             col=heatmapColors))
   garbage <- dev.off()               # close the PDF device
   
-  tiff(filenames$tiff)
-  garbageCollect <- capture.output(heatmap.2(heatmapData,
-            hclustfun=function(x) hclust(x,method="ward.D2"),
-            distfun=function(x) dist(x,method="euclidean"),
-            main = graphTitle,
-            trace="none",         # turns off trace lines inside the heat map
-            margins=c(12,9),     # widens margins around plot
-            dendrogram=dendroStatus,
-            density.info="none",
-            Rowv=rowV,
-            Colv=colV,
-            breaks=c(-7:-1/7,1:7/7),
-            cexRow=1,cexCol=1,srtCol=45,
-            col=heatmapColors))
-  garbage <- dev.off()               # close the TIFF device
+  if(capabilities("tiff")) {
+    tiff(filenames$tiff)
+    garbageCollect <- capture.output(heatmap.2(heatmapData,
+              hclustfun=function(x) hclust(x,method="ward.D2"),
+              distfun=function(x) dist(x,method="euclidean"),
+              main = graphTitle,
+              trace="none",         # turns off trace lines inside the heat map
+              margins=c(12,9),     # widens margins around plot
+              dendrogram=dendroStatus,
+              density.info="none",
+              Rowv=rowV,
+              Colv=colV,
+              breaks=c(-7:-1/7,1:7/7),
+              cexRow=1,cexCol=1,srtCol=45,
+              col=heatmapColors))
+    garbage <- dev.off()               # close the TIFF device
+  }
   
   suppressWarnings(xfig(filenames$xfig))
   garbageCollect <- capture.output(heatmap.2(heatmapData,
