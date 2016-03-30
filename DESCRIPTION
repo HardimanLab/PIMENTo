@@ -1,6 +1,6 @@
 Package: illuminaPipeline
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
+Title: Illumina Microarray Analysis Pipeline
+Version: 1.0
 Authors@R: person("Nash", "Thomas", , "nashtf@g.cofc.edu", role = c("aut", "cre"))
 Description: illuminaPipeline is an R package to normalize, analyze, and visualize data from Illumina microarrays for two class unpaired experiments.
 Depends:

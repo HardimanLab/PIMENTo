@@ -4,15 +4,22 @@
 \alias{runSAM}
 \title{Identify significant genes through SAM}
 \usage{
-runSAM(backgroundSub.obj, response, delta)
+runSAM(backgroundSub.obj, classCompareCols, classCompareName, 
+fdr.cutoff=0.1, response)
 }
 \arguments{
 \item{backgroundSub.obj}{Object returned from call to 
 backgroundSub}
 
-\item{response}{Vector of array group membership, 1=control, 2=experimental}
+\item{classCompareCols}{Vector of column indices indicating which subset 
+of arrays are to be compared for this comparison}
 
-\item{delta}{Tuning parameter to obtain significant number of genes}
+\item{classCompareName}{String title given to the name of the comparison}
+
+\item{fdr.cutoff}{Max FDR for SAM, will use delta value which results in max 
+FDR below this cutoff}
+
+\item{response}{Vector of 1, 2 values that indicate group membership}
 }
 \value{
 A list with components
@@ -24,6 +31,9 @@ positive and negative correlation}
 \item{pipelineName}{Name of pipeline generated from input file name sans 
 extension}
 \item{data}{Data frame of chosen normalization method data}
+\item{classCompareCols}{Value entered through classCompareCols parameter}
+\item{classCompareName}{Value entered through classCompareName parameter}
+\item{symbolIndex}{Column index that contains gene symbol}
 }
 \description{
 Implement SAM and compute significant genes given delta. Output

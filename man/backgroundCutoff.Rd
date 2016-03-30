@@ -4,7 +4,7 @@
 \alias{backgroundCutoff}
 \title{Visualize arrays to identify cutoff for background subtraction}
 \usage{
-backgroundCutoff(preprocessData.obj, method=c("loess","quantile"), 
+backgroundCutoff(preprocessData.obj, method=c("mloess","quantile"), 
 xlim.lo=0, xlim.hi)
 }
 \arguments{

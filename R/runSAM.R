@@ -2,11 +2,16 @@
 #' @description Implement SAM and compute significant genes given delta. Output
 #' will consist of all significant genes ordered by increasing q-value and 
 #' decreasing d-score.
-#' @usage runSAM(backgroundSub.obj, response, delta)
+#' @usage runSAM(backgroundSub.obj, classCompareCols, classCompareName, 
+#' fdr.cutoff=0.1, response)
 #' @param backgroundSub.obj Object returned from call to 
 #' backgroundSub
-#' @param response Vector of array group membership, 1=control, 2=experimental
-#' @param delta Tuning parameter to obtain significant number of genes
+#' @param classCompareCols Vector of column indices indicating which subset 
+#' of arrays are to be compared for this comparison
+#' @param classCompareName String title given to the name of the comparison
+#' @param fdr.cutoff Max FDR for SAM, will use delta value which results in max 
+#' FDR below this cutoff
+#' @param response Vector of 1, 2 values that indicate group membership
 #' @return A list with components
 #' \item{siggenesTable}{Combined data frame of genes having significant 
 #' positive and negative correlation}
@@ -16,6 +21,9 @@
 #' \item{pipelineName}{Name of pipeline generated from input file name sans 
 #' extension}
 #' \item{data}{Data frame of chosen normalization method data}
+#' \item{classCompareCols}{Value entered through classCompareCols parameter}
+#' \item{classCompareName}{Value entered through classCompareName parameter}
+#' \item{symbolIndex}{Column index that contains gene symbol}
 #' @export
 
 runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,

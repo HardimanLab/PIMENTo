@@ -1,8 +1,3 @@
-#' @title Generate plot of sample identify matrix and PCA
-#' @description Heatmap of sample similarity will be created along with a PCA
-#' plot labelled with control and experimental groups.
-#' @usage sampleSimilarity(runSAM.obj)
-#' @param runSAM.obj Object returned from call to runSAM
 #' @import ggplot2
 
 sampleSimilarity <- function(runSAM.obj) {

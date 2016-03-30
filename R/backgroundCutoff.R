@@ -3,7 +3,7 @@
 #' to identify cutoff for background subtraction. Upper and lower limits can be
 #' changed to narrow focus. Plots will be saved in analysis pipeline 
 #' directory.
-#' @usage backgroundCutoff(preprocessData.obj, method=c("loess","quantile"), 
+#' @usage backgroundCutoff(preprocessData.obj, method=c("mloess","quantile"), 
 #' xlim.lo=0, xlim.hi)
 #' @param preprocessData.obj Object returned from call to 
 #' preprocessData
@@ -13,7 +13,7 @@
 #' @param xlim.hi Upper bound on X for histogram plot (binary logarithm)
 #' @export
 
-backgroundCutoff <- function(preprocessData.obj,method,
+backgroundCutoff <- function(preprocessData.obj, method,
                              xlim.lo=0,xlim.hi=0) {
 
   if (grepl("quantile",method))

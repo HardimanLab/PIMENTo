@@ -2,7 +2,7 @@
 % Please edit documentation in R/pathwayHeatmap.R
 \name{pathwayHeatmap}
 \alias{pathwayHeatmap}
-\title{Generate MA plots of raw and normalized data}
+\title{Create heatmaps on desired subsets of genes}
 \usage{
 preprocessPlots(runSAM.obj, pathwaysDir, fileFormat=c("geneid",
 "symbol"))

@@ -1,4 +1,4 @@
-#' @title Generate MA plots of raw and normalized data
+#' @title Create heatmaps on desired subsets of genes
 #' @description Normalize input raw data using quantile and mloess methods. 
 #' Plots of the normalized data along with a dendrogram clustering all samples 
 #' will be stored in newly created pipeline directory.
@@ -11,7 +11,7 @@
 #' "geneid" or "symbol"
 #' @export
 
-pathwayHeatmap <- function(runSAM.obj,pathwaysDir,fileFormat){
+pathwayHeatmap <- function(runSAM.obj, pathwaysDir, fileFormat){
     
   outputDir <- paste0(getwd(),"/heatmap_output")
   

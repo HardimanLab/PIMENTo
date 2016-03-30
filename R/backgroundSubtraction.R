@@ -23,7 +23,7 @@
 #' method}
 #' @export
 
-backgroundSubtraction <- function(preprocessData.obj,method,cutoff) {
+backgroundSubtraction <- function(preprocessData.obj, method, cutoff) {
 
   if(missing(cutoff))
     stop("Must submit cutoff value for background subtraction.")
