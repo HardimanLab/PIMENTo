@@ -79,7 +79,10 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
   ordered.allSiggenes <- allSiggenes[order(-(as.numeric(allSiggenes[,8])),
                                              abs(as.numeric(allSiggenes[,4])),
                                              decreasing=TRUE),]
-  write.csv(ordered.allSiggenes,file=siggenesFile,row.names=FALSE)
+  write.siggenes <- as.data.frame(ordered.allSiggenes)
+  write.siggenes$optimalDelta <- as.character(
+    c(delta, rep(" ", nrow(ordered.allSiggenes)-1)))
+  write.csv(write.siggenes,file=siggenesFile,row.names=FALSE)
   cat("Significant gene list available at ./",siggenesFile,"\n",sep="")
   
   colnames(ordered.allSiggenes) <- make.names(colnames(allSiggenes))
