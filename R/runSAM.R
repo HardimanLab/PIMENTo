@@ -65,8 +65,11 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
   capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=1000))
   
   delta <- delta.table[which(delta.table[,5] <= fdr.cutoff)[1],1]
-  if (is.na(delta)) {
-    stop("Cutoff is too stringent, no delta available. Increase FDR cutoff.")
+  while (is.na(delta)) {
+    fdr.cutoff <- fdr.cutoff + 0.05
+    warning(paste0("Cutoff is too stringent, no delta available. Increasing FDR cutoff to ", 
+                   fdr.cutoff))
+    delta <- delta.table[which(delta.table[,5] <= fdr.cutoff)[1],1]
   }
   
   desc.dataSAM <- data.frame(backgroundSub.obj$descStats,dataSAM)
