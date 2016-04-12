@@ -65,7 +65,6 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
   capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=1000))
   
   delta <- delta.table[which(delta.table[,5] <= fdr.cutoff)[1],1]
-  print(paste0("Delta is ", delta))
   while (is.na(delta)) {
     fdr.cutoff <- fdr.cutoff + 0.05
     if (fdr.cutoff == 1.00) {
