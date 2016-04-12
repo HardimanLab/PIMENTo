@@ -85,7 +85,7 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
     stop("No significant genes at provided delta")
   }
     
-  if (!missing("classCompareName")) {
+  if (!missing(classCompareName)) {
     siggenesFile=paste0(backgroundSub.obj$pipelineName,"_pipeline/",
                         backgroundSub.obj$pipelineName,"_sigGenes-",
                         classCompareName,".csv")
