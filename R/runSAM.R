@@ -65,13 +65,16 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
   capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=1000))
   
   delta <- delta.table[which(delta.table[,5] <= fdr.cutoff)[1],1]
+  print(paste0("Delta is ", delta))
   while (is.na(delta)) {
     fdr.cutoff <- fdr.cutoff + 0.05
-    warning(paste0("Cutoff is too stringent, no delta available. Increasing FDR cutoff to ", 
-                   fdr.cutoff))
+    if (fdr.cutoff == 1.00) {
+      stop("Have reached cutoff of 1.00 and no delta found.")
+    }
+    cat("Cutoff is too stringent, no delta available. Increasing FDR cutoff to ",
+        fdr.cutoff, "\n")
     delta <- delta.table[which(delta.table[,5] <= fdr.cutoff)[1],1]
   }
-  
   desc.dataSAM <- data.frame(backgroundSub.obj$descStats,dataSAM)
   
   # samr.compute.siggenes.table flips genename and geneid
@@ -105,6 +108,8 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
   write.siggenes <- as.data.frame(ordered.allSiggenes)
   write.siggenes$optimalDelta <- as.character(
     c(delta, rep(" ", nrow(ordered.allSiggenes)-1)))
+  write.siggenes$fdr.cutoff <- as.character(
+    c(fdr.cutoff, rep(" ", nrow(ordered.allSiggenes)-1)))
   write.csv(write.siggenes,file=siggenesFile,row.names=FALSE)
   cat("Significant gene list available at ./",siggenesFile,"\n",sep="")
   
