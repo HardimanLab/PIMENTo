@@ -45,8 +45,9 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
   genenames <- as.data.frame(backgroundSub.obj$symbol)
   geneid <- as.data.frame(backgroundSub.obj$id)
   
-  if(length(response) != ncol(dataSAM))
+  if(length(response) != ncol(dataSAM)) {
     stop("Number of responses does not match number of samples.")
+  }
   
   listSAM = list(x=log.dataSAM,y=response,genenames=genenames,geneid=geneid,
                  logged2=T)
@@ -59,10 +60,17 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
   } else {
     stop("Arrays can only belong to control (1) or experimental (2).")
   }
+  
   cat("Calculating delta table\n")
   capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=1000))
+  
   delta <- delta.table[which(delta.table[,5] <= fdr.cutoff)[1],1]
+  if (is.na(delta)) {
+    stop("Cutoff is too stringent, no delta available. Increase FDR cutoff.")
+  }
+  
   desc.dataSAM <- data.frame(backgroundSub.obj$descStats,dataSAM)
+  
   # samr.compute.siggenes.table flips genename and geneid
   colnames(desc.dataSAM)[c(backgroundSub.obj$symbolIndex,
                            backgroundSub.obj$idInd)] <- c("geneid","genenames")
@@ -72,16 +80,20 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
   cat("\nSAM Results:\nOptimal delta:",delta,"\nNo. of significantly down regulated genes:",
       siggenes.table$ngenes.lo,"\nNo. of significantly up regulated genes:",
       siggenes.table$ngenes.up,"\n\n")
-  if (sum(nrow(siggenes.table$genes.up),nrow(siggenes.table$genes.lo)) < 1)
-    stop("No significant genes at provided delta")
   
-  if (exists("classCompareName"))
+  if (sum(nrow(siggenes.table$genes.up),nrow(siggenes.table$genes.lo)) < 1) {
+    stop("No significant genes at provided delta")
+  }
+    
+  if (exists("classCompareName")) {
     siggenesFile=paste0(backgroundSub.obj$pipelineName,"_pipeline/",
                         backgroundSub.obj$pipelineName,"_sigGenes-",
                         classCompareName,".csv")
-  else
+  }
+  else {
     siggenesFile=paste0(backgroundSub.obj$pipelineName,"_pipeline/",
                         backgroundSub.obj$pipelineName,"_sigGenes.csv")
+  }
     
   allSiggenes <- as.matrix(rbind(siggenes.table$genes.up,siggenes.table$genes.lo))
   ordered.allSiggenes <- allSiggenes[order(-(as.numeric(allSiggenes[,8])),
