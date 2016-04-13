@@ -113,7 +113,6 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
   cat("Significant gene list available at ./",siggenesFile,"\n",sep="")
   
   colnames(ordered.allSiggenes) <- make.names(colnames(allSiggenes))
-
   if (missing(classCompareCols)) {
     sam.return.list <- list(siggenesTable=ordered.allSiggenes,data=desc.dataSAM,
               ntext=backgroundSub.obj$ntext,
