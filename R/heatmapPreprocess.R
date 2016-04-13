@@ -25,8 +25,7 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
                  filenames$outputDir,"/",pathwaysDir))
     dir.create(paste0(filenames$outputDir,"/",pathwaysDir), 
                showWarnings = FALSE)
-  }
-
+  }  
   colnames(inputData$data)[inputData$symbolIndex] <- "Symbol"
   colnames(inputData$data)[inputData$idIndex] <- "GeneID"
 

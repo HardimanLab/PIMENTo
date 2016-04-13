@@ -118,7 +118,10 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
     sam.return.list <- list(siggenesTable=ordered.allSiggenes,data=desc.dataSAM,
               ntext=backgroundSub.obj$ntext,
               pipelineName=backgroundSub.obj$pipelineName,
-              response=response,dataCol=backgroundSub.obj$dataCol)
+              response=response,
+              dataCol=backgroundSub.obj$dataCol,
+              idIndex=backgroundSub.obj$idIndex,
+              symbolIndex=backgroundSub.obj$symbolIndex)
   }
   else {
     ntext <- backgroundSub.obj$ntext
@@ -126,10 +129,13 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
     sam.return.list <- list(siggenesTable=ordered.allSiggenes,data=desc.dataSAM,
               ntext=backgroundSub.obj$ntext,
               pipelineName=backgroundSub.obj$pipelineName,
-              response=response,dataCol=backgroundSub.obj$dataCol,
-              classCompareCols=subsetClassCompareCols,idIndex=backgroundSub.obj$idIndex,
-              symbolIndex=backgroundSub.obj$symbolIndex,
-              classCompareName=classCompareName)
+              response=response,
+              dataCol=backgroundSub.obj$dataCol,
+              classCompareCols=subsetClassCompareCols,
+              classCompareName=classCompareName,
+              idIndex=backgroundSub.obj$idIndex,
+              symbolIndex=backgroundSub.obj$symbolIndex
+              )
   }
   sampleSimilarity(sam.return.list)
 
