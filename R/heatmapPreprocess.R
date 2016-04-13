@@ -49,9 +49,7 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
   else {
     heatmapValues <- inputData$data[matchingGenes,inputData$dataCol]
   }
-  temp <- heatmapValues
-  temp[temp==0] <- 1
-  heatmapValues <- as.data.frame(temp)
+  heatmapValues[heatmapValues==0] <- 1
   
     
   if (nrow(heatmapValues)[1] == 0) {
