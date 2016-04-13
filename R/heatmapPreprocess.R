@@ -50,8 +50,11 @@ heatmapPreprocess <- function(inputData,inputFile,pathwaysDir,method,filenames){
   else {
     heatmapValues <- inputData$data[matchingGenes,inputData$dataCol]
   }
-  heatmapValues[heatmapValues==0] <- 1
+  temp <- heatmapValues
+  temp[temp==0] <- 1
+  heatmapValues <- as.data.frame(temp)
   
+    
   if (nrow(heatmapValues)[1] == 0) {
     warning(paste0("No genes from file ", inputFile, " match those in dataset.",
                     " Moving to next file in subset"))
