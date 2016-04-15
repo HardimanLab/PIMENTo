@@ -1,9 +1,9 @@
-# illuminaPipeline
-illuminaPipeline is an R package to normalize, analyze, and visualize Illumina microarrays for two class unpaired experiments.
+# NASHMAP
+NASHMAP is an R package to normalize, analyze, and visualize microarrays for two class unpaired experiments.
 
 # Installation
-You can install `illuminaPipeline` using the `devtools` package as such:
+You can install `NASHMAP` using the `devtools` package as such:
 ```coffee
 library(devtools)
-install_github("TomNash/illuminaPipeline")
+install_github("TomNash/NASHMAP")
 ```
