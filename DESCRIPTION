@@ -1,8 +1,8 @@
-Package: NASHMAP
+Package: PIMENTo
 Title: Microarray Analysis Pipeline
 Version: 1.0
 Authors@R: person("Nash", "Thomas", , "nashtf@g.cofc.edu", role = c("aut", "cre"))
-Description: NASHMAP is an R package to normalize, analyze, and visualize microarray data
+Description: PIMENTo is an R package to normalize, analyze, and visualize microarray data
 Depends:
     R (>= 3.2.0)
 Imports:

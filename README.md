@@ -1,9 +1,9 @@
 # NASHMAP
-NASHMAP is an R package to normalize, analyze, and visualize microarrays for two class unpaired experiments.
+PIMENTo is an R package to normalize, analyze, and visualize microarray data
 
 # Installation
-You can install `NASHMAP` using the `devtools` package as such:
+You can install `PIMENTo` using the `devtools` package as such:
 ```coffee
 library(devtools)
-install_github("TomNash/NASHMAP")
+install_github("TomNash/PIMENTo")
 ```
