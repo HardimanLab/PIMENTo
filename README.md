@@ -1,4 +1,4 @@
-# NASHMAP
+# PIMENTo
 PIMENTo is an R package to normalize, analyze, and visualize microarray data
 
 # Installation
