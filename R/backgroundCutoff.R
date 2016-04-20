@@ -27,9 +27,7 @@ backgroundCutoff <- function(preprocessData.obj, method,
     stop("Input argument 'xlim.lo' must be less than 'xlim.hi'")
 
   geneMax <- apply(backgroundData,1,max)
-  mat.geneMax <- as.matrix(geneMax)
-  mat.geneMax[mat.geneMax==0] <- 1
-  geneMax <- as.data.frame(mat.geneMax)
+  geneMax[geneMax==0] <- 1
   logData <- log2(geneMax)
   
   if (xlim.hi != 0 | xlim.lo != 0) {
