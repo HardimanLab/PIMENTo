@@ -93,7 +93,9 @@ preprocessData <- function(inputFile,fileSheet=1,ntext=2,dataCol,symbolIndex=1,
       cat("Dendrogram of raw data plotted at",ps.clusterFile,"\n")
       cat("Raw data plots created at",ps.outputFile,"\n")
     } else if (normType == "loess") {
-      capture.output(dataNorm <- affy::normalize.loess(as.matrix(data)))
+      mat <- as.matrix(data)
+      mat[mat==0] <- 1
+      capture.output(dataNorm <- affy::normalize.loess(mat))
       dataList$mloess <- cbind(descStats,dataNorm)
       cat("MLOESS normalized data plots created at",ps.outputFile,"\n")
     } else if (normType == "quantile") {
