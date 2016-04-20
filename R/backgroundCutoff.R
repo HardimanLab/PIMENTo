@@ -24,6 +24,9 @@ backgroundCutoff <- function(preprocessData.obj, method,
     stop("Input argument 'method' must be either 'quantile' or 'mloess'")
   
   geneMax <- apply(backgroundData,1,max)
+  mat.geneMax <- as.matrix(geneMax)
+  mat.geneMax[mat.geneMax==0] <- 1
+  geneMax <- as.data.frame(mat.geneMax)
   logData <- log2(geneMax)
   
   if(xlim.hi != 0 | xlim.lo != 0) {
