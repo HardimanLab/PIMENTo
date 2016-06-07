@@ -1,6 +1,6 @@
 #' @title Generate MA plots of raw and normalized data
 #' @description Normalize input raw data using quantile and mloess methods. Plots
-#' of the normalized data along with a dendrogram librarclustering all samples will 
+#' of the normalized data along with a dendrogram clustering all samples will 
 #' be stored in newly created pipeline directory.
 #' @usage preprocessPlots(inputFile, fileSheet=1, ntext=2, dataCol, symbolIndex=1,
 #'  idIndex=2)
