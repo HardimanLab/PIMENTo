@@ -71,17 +71,17 @@ preprocessData <- function(inputFile,fileSheet=1,ntext=2,dataCol,symbolIndex=1,
     dir.create(file.path(getwd(),paste0(pipelineName,"_pipeline")))
   }
   
-  for (normType in c("raw","loess","quantile")) {
-    ps.outputFile=paste0("./",pipelineName,"_pipeline/",pipelineName,"_",normType,".ps")
-    pdf.outputFile=paste0("./",pipelineName,"_pipeline/",pipelineName,"_",normType,".pdf")
+  for (normType in c("raw","mloess","quantile")) {
+    ps.plotsFile <- paste0("./",pipelineName,"_pipeline/",pipelineName,"_",normType,"_plots.ps")
+    pdf.plotsFile <- paste0("./",pipelineName,"_pipeline/",pipelineName,"_",normType,"_plots.pdf")
 
     if (normType == "raw") {
-      dataNorm <- data
-      ps.clusterFile=paste0("./",pipelineName,"_pipeline/",pipelineName,"_cluster.ps")
-      pdf.clusterFile=paste0("./",pipelineName,"_pipeline/",pipelineName,"_cluster.pdf")
-      
+      dataNorm <- data      
       dist <- dist(t(dataNorm))
       
+      ps.clusterFile <- paste0("./",pipelineName,"_pipeline/",pipelineName,"_cluster.ps")
+      pdf.clusterFile <- paste0("./",pipelineName,"_pipeline/",pipelineName,"_cluster.pdf")
+
       postscript(file=ps.clusterFile,paper="letter")
       plot(hclust(dist,method="ward.D2"))
       garbage <- dev.off()
@@ -91,28 +91,33 @@ preprocessData <- function(inputFile,fileSheet=1,ntext=2,dataCol,symbolIndex=1,
       garbage <- dev.off()
       
       cat("Dendrogram of raw data plotted at",ps.clusterFile,"\n")
-      cat("Raw data plots created at",ps.outputFile,"\n")
-    } else if (normType == "loess") {
+      cat("Raw data plots created at",ps.plotsFile,"\n")
+    } else if (normType == "mloess") {
       mat <- as.matrix(data)
       mat[mat==0] <- 1
+
       capture.output(dataNorm <- affy::normalize.loess(mat))
+
       dataList$mloess <- cbind(descStats,dataNorm)
-      cat("MLOESS normalized data plots created at",ps.outputFile,"\n")
+      write.csv(dataList$mloess, paste0("./",pipelineName,"_pipeline/",pipelineName,"_mloess_data.csv"), row.names=F)
+      cat("MLOESS normalized data plots created at",ps.plotsFile,"\n")
     } else if (normType == "quantile") {
       dataNorm <- limma::normalizeQuantiles(as.matrix(data))
+
       dataList$quantile <- cbind(descStats,dataNorm)
-      cat("Quantile normalized data plots created at",ps.outputFile,"\n")
+      write.csv(dataList$quantile, paste0("./",pipelineName,"_pipeline/",pipelineName,"_quantile_data.csv"), row.names=F)
+      cat("Quantile normalized data plots created at",ps.plotsFile,"\n")
     }
 
     # Postscript output
-    postscript(file=ps.outputFile,paper="letter")
+    postscript(file=ps.plotsFile,paper="letter")
     par(mfrow=format,pty="s")
         
     for (i in 1:panels) {     
-      x<-as.numeric(dataNorm[,((i-1) %% panels)+1])
-      y<-as.numeric(dataNorm[,(i %% panels)+1])
-      A<-(log2(x)+log2(y))/2
-      M<-log2(y)-log2(x)
+      x <- as.numeric(dataNorm[,((i-1) %% panels)+1])
+      y <- as.numeric(dataNorm[,(i %% panels)+1])
+      A <- (log2(x)+log2(y))/2
+      M <- log2(y)-log2(x)
       plot(A,M,xlim=c(4,14),ylim=c(-3,3),cex=1,pch=".",xlab=labels[((i-1) %% 
           panels)+1],main=labels[(i %% panels)+1],font.main=1,cex.main=1)
       lines(c(0,18),c(0,0),col="cyan")
@@ -120,14 +125,14 @@ preprocessData <- function(inputFile,fileSheet=1,ntext=2,dataCol,symbolIndex=1,
     garbage <- dev.off() 
     
     # PDF output
-    pdf(file=pdf.outputFile,paper="letter")
+    pdf(file=pdf.plotsFile,paper="letter")
     par(mfrow=format,pty="s")
     
     for (i in 1:panels) {     
-      x<-as.numeric(dataNorm[,((i-1) %% panels)+1])
-      y<-as.numeric(dataNorm[,(i %% panels)+1])
-      A<-(log2(x)+log2(y))/2
-      M<-log2(y)-log2(x)
+      x <- as.numeric(dataNorm[,((i-1) %% panels)+1])
+      y <- as.numeric(dataNorm[,(i %% panels)+1])
+      A <- (log2(x)+log2(y))/2
+      M <- log2(y)-log2(x)
       plot(A,M,xlim=c(4,14),ylim=c(-3,3),cex=1,pch=".",xlab=labels[((i-1) %% 
            panels)+1],main=labels[(i %% panels)+1],font.main=1,cex.main=1)
       lines(c(0,18),c(0,0),col="cyan")

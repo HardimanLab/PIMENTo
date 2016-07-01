@@ -46,7 +46,10 @@ backgroundSubtraction <- function(preprocessData.obj, method, cutoff) {
   preprocessData.obj$descStats <- descStats
   preprocessData.obj$mloess <- NULL
   preprocessData.obj$quantile <- NULL
-  
+
+  pipelineName <- preprocessData.obj$pipelineName
+
+  write.csv(preprocessData.obj$data, paste0("./",pipelineName,"_pipeline/",pipelineName,"_backgroundSub_",method,"_data.csv"), row.names=F)
 
   return(preprocessData.obj)
 }
