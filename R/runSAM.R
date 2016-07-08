@@ -37,10 +37,10 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
   }
 
   if (missing(classCompareCols)) {
-    dataSAM <- backgroundSub.obj$data[,backgroundSub.obj$dataCol]
+    dataSAM <- backgroundSub.obj$normalized[,backgroundSub.obj$dataCol]
   }
   else {
-      dataSAM <- backgroundSub.obj$data[,classCompareCols]
+      dataSAM <- backgroundSub.obj$normalized[,classCompareCols]
   }
   log.dataSAM <- log2(dataSAM)
   genenames <- as.data.frame(backgroundSub.obj$symbol)

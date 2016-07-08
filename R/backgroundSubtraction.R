@@ -19,7 +19,7 @@
 #' \item{descStats}{Vector of column indices containing descriptive statistics}
 #' \item{pipelineName}{Name of pipeline generated from input file name sans 
 #' extension}
-#' \item{data}{Data frame of descriptive stats and normalized data for chosen 
+#' \item{normalized}{Data frame of descriptive stats and normalized data for chosen 
 #' method}
 #' @export
 
@@ -42,14 +42,14 @@ backgroundSubtraction <- function(preprocessData.obj, method, cutoff) {
   
   preprocessData.obj$symbol <- preprocessData.obj$symbol[keepIndices]
   preprocessData.obj$id <- preprocessData.obj$id[keepIndices]
-  preprocessData.obj$data <- cbind(descStats,subtractedData)
+  preprocessData.obj$normalized <- cbind(descStats,subtractedData)
   preprocessData.obj$descStats <- descStats
   preprocessData.obj$mloess <- NULL
   preprocessData.obj$quantile <- NULL
 
   pipelineName <- preprocessData.obj$pipelineName
 
-  write.csv(preprocessData.obj$data, paste0("./",pipelineName,"_pipeline/",pipelineName,"_backgroundSub_",method,"_data.csv"), row.names=F)
+  write.csv(preprocessData.obj$normalized, paste0("./",pipelineName,"_pipeline/",pipelineName,"_backgroundSub_",method,"_data.csv"), row.names=F)
 
   return(preprocessData.obj)
 }
