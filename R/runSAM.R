@@ -11,7 +11,8 @@
 #' @param classCompareName String title given to the name of the comparison
 #' @param fdr.cutoff Max FDR for SAM, will use delta value which results in max 
 #' FDR below this cutoff
-#' @param response Vector of 1, 2 values that indicate group membership
+#' @param response For two class unpaired: vector of 1, 2 values that indicate group membership.
+#' For two class paired: vector of -1, 1, -2, 2, etc. values that indicate pairings.
 #' @return A list with components
 #' \item{siggenesTable}{Combined data frame of genes having significant 
 #' positive and negative correlation}
@@ -53,14 +54,16 @@ runSAM <- function(backgroundSub.obj,classCompareCols,classCompareName,
                  logged2=T)
   cat("Beginning SAM processing\n")
   
-  if(length(unique(response)) == 2) {
+  if (sum(response < 0) == 0) {
     capture.output(samr.obj <- samr::samr(listSAM,resp.type="Two class unpaired",
                                           s0.perc=50,testStatistic="standard",
                                           nperms=200))
   } else {
-    stop("Arrays can only belong to control (1) or experimental (2).")
-  }
-  
+    capture.output(samr.obj <- samr::samr(listSAM,resp.type="Two class paired",
+                                          s0.perc=50,testStatistic="standard",
+                                          nperms=200))
+  }  
+
   cat("Calculating delta table\n")
   capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj,nvals=1000))
   
