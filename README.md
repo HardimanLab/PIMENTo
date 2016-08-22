@@ -7,6 +7,6 @@ You can install `PIMENTo` using the `devtools` package as such:
 install.packages("devtools")
 source("https://bioconductor.org/biocLite.R")
 biocLite(c("affy", "limma", "DESeq2"))
-devtools::install_github("TomNash/PIMENTo")
+devtools::install_github("MUSC-CGM/PIMENTo")
 library(PIMENTo)
 ```
