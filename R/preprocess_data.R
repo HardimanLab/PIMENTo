@@ -46,8 +46,8 @@ PreprocessData <- function(input.file, file.sheet=1, ntext=2, data.col,
   format <- c(2, 3)
   remove.batch <- F
 
-  if (!is.na(batch)) {
-    if (!length(batch == length(data.col))) {
+  if (!is.na(batch.vector)) {
+    if (!length(batch.vector == length(data.col))) {
       stop("Length of batch vector must equal number of data columns.")
     }
     remove.batch <- T
