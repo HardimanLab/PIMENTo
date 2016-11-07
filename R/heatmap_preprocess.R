@@ -48,7 +48,6 @@ HeatmapPreprocess <- function(input.data, input.file, subsets.dir,
   # Filter down to desired genes
   write.table(heatmap.ID, paste0("norm_genes_", input.file, ".txt"))
   matching.genes <- na.omit(match(gene.list,heatmap.ID))
-  print(gene.list[attr(na.omit(matching.genes), "na.action")])
   heatmap.genes <- input.data$normalized[matching.genes, ]
   
   if ("class.compare.cols" %in% names(input.data)) {

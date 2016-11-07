@@ -1,7 +1,7 @@
 #' @import gplots
 
 HeatmapMake <- function(heatmap.data, graph.title, cluster, filenames, 
-                        subsets.dir) {  
+                        subsets.dir) {
   
   writeLines(row.names(heatmap.data), paste0("gene-names-present-",graph.title,".txt"))
   heatmap.colors <- c("#000033", "#333366", "#666699", "#9999CC", "#CCCCFF",
