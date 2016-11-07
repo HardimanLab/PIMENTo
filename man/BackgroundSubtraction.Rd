@@ -12,7 +12,7 @@ method=c("mloess", "quantile"), cutoff)
 preprocess.data}
 
 \item{method}{Type of normalization to use: "quantile" for quantile 
-normalization; "mloess" for MLOESS normalization}
+normalization; "mloess" for MLOESS normalization; "raw" for raw data}
 
 \item{cutoff}{The cutoff value (binary logarithm) identified through
 background.cutoff}
@@ -22,9 +22,7 @@ A list with components
 \item{ntext}{Number of leading text columns}
 \item{data.col}{Vector of column indices containing array data}
 \item{id}{Vector containing gene ID's}
-\item{id.ind}{Column index containing gene ID information}
 \item{symbol}{Vector containing gene symbols}
-\item{symbol.index}{Column index containing gene symbol information}
 \item{desc.stats}{Vector of column indices containing descriptive statistics}
 \item{pipeline.name}{Name of pipeline generated from input file name sans 
 extension}

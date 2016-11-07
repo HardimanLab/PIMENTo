@@ -4,15 +4,15 @@
 \alias{BackgroundCutoff}
 \title{Visualize arrays to identify cutoff for background subtraction}
 \usage{
-BackgroundCutoff(preprocess.data.obj, method=c("mloess","quantile"), 
-xlim.lo=0, xlim.hi)
+BackgroundCutoff(preprocess.data.obj, method=c("mloess","quantile",
+"raw"), xlim.lo=0, xlim.hi)
 }
 \arguments{
 \item{preprocess.data.obj}{Object returned from call to 
 preprocess.data}
 
 \item{method}{Type of normalization to use: "quantile" for quantile 
-normalization; "mloess" for MLOESS normalization}
+normalization; "mloess" for MLOESS normalization; "raw" for raw data}
 
 \item{xlim.lo}{Lower bound on X for histogram plot (binary logarithm)}
 
