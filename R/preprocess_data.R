@@ -30,6 +30,9 @@
 PreprocessData <- function(input.file, file.sheet=1, ntext=2, data.col, 
                            symbol.index=1, id.index=2, batch.vector=NA) {
 
+  if (grepl("/", input.file)) {
+    stop("Input file must come from current working directory")
+  }
   ext <- tools::file_ext(input.file)
   if (ext == "xlsx")
     X <- openxlsx::read.xlsx(input.file, sheet=file.sheet)
@@ -68,6 +71,17 @@ PreprocessData <- function(input.file, file.sheet=1, ntext=2, data.col,
   }
   
   data.list = list()
+  
+  check.sequence <- rle(diff(data.col))
+  if (any(check.sequence$lengths < length(data.col)-1 & check.sequence$values==1)) {
+    columns.string <- as.character(split(data.col, cumsum(c(TRUE, diff(data.col) != 1))))
+    columns.string <- paste0(gsub(":","_", columns.string), collapse = "_")
+    pipeline.name <- paste0(pipeline.name, "_columns_", columns.string)
+    
+    data.list$original.columns <- data.col
+    data.col <- seq(min(data.col),min(data.col)+length(data.col)-1)
+  }
+  
   data.list$ntext=ntext
   data.list$data.col=data.col
   data.list$id=X[, id.index]
@@ -96,7 +110,7 @@ PreprocessData <- function(input.file, file.sheet=1, ntext=2, data.col,
     }
 
     if (normType == "raw") {
-      data.norm <- data      
+      data.norm <- data
       dist <- dist(t(data.norm))
       
       ps.cluster <- paste0("./", pipeline.name, "_pipeline/", pipeline.name,
@@ -104,10 +118,12 @@ PreprocessData <- function(input.file, file.sheet=1, ntext=2, data.col,
       pdf.cluster <- paste0("./", pipeline.name, "_pipeline/", pipeline.name, 
                             "_cluster.pdf")
 
+      data.list$raw <- cbind(desc.stats, data.norm)
+
       postscript(file=ps.cluster, paper="letter")
       plot(hclust(dist, method="ward.D2"))
-      garbage <- dev.off()
-      
+      garbage <- dev.off()      
+
       pdf(file=pdf.cluster, paper="letter")
       plot(hclust(dist, method="ward.D2"))
       garbage <- dev.off()

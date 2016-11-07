@@ -3,12 +3,12 @@
 #' to identify cutoff for background subtraction. Upper and lower limits can be
 #' changed to narrow focus. Plots will be saved in analysis pipeline 
 #' directory.
-#' @usage BackgroundCutoff(preprocess.data.obj, method=c("mloess","quantile"), 
-#' xlim.lo=0, xlim.hi)
+#' @usage BackgroundCutoff(preprocess.data.obj, method=c("mloess","quantile",
+#' "raw"), xlim.lo=0, xlim.hi)
 #' @param preprocess.data.obj Object returned from call to 
 #' preprocess.data
 #' @param method Type of normalization to use: "quantile" for quantile 
-#' normalization; "mloess" for MLOESS normalization
+#' normalization; "mloess" for MLOESS normalization; "raw" for raw data
 #' @param xlim.lo Lower bound on X for histogram plot (binary logarithm)
 #' @param xlim.hi Upper bound on X for histogram plot (binary logarithm)
 #' @export
@@ -16,15 +16,19 @@
 BackgroundCutoff <- function(preprocess.data.obj, method,
                              xlim.lo=0, xlim.hi=0) {
 
-  if (grepl("quantile",method))
-    background.data <- 
-      preprocess.data.obj$quantile[, preprocess.data.obj$data.col]
-  else if (grepl("mloess",method))
-    background.data <- 
-      preprocess.data.obj$mloess[, preprocess.data.obj$data.col]
-  else
-    stop("Input argument 'method' must be either 'quantile' or 'mloess'")
-  
+  if (grepl("quantile", method)) {
+    background.data <- preprocess.data.obj$quantile[, preprocess.data.obj$data.col]
+  }
+  else if (grepl("mloess", method)) {
+    background.data <- preprocess.data.obj$mloess[, preprocess.data.obj$data.col]
+  }
+  else if (grepl("raw", method)) {
+    background.data <- preprocess.data.obj$raw[, preprocess.data.obj$data.col]
+  }
+  else {
+    stop("Input argument 'method' must be either 'raw', 'quantile' or 'mloess'")
+  }
+
   if (xlim.hi < xlim.lo)
     stop("Input argument 'xlim.lo' must be less than 'xlim.hi'")
 

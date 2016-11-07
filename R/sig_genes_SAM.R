@@ -29,7 +29,7 @@
 #' @export
 
 SigGenesSAM <- function(background.subtraction.obj, class.compare.cols, 
-                        class.compare.name, fdr.cutoff=0.1, response) {
+                        class.compare.name, fdr.cutoff=0.1, response, delta) {
   
   if ((missing(class.compare.cols) & !missing(class.compare.name)) | 
        (missing(class.compare.name) & !missing(class.compare.cols))) {
@@ -45,8 +45,13 @@ SigGenesSAM <- function(background.subtraction.obj, class.compare.cols,
       data.SAM <- background.subtraction.obj$normalized[, class.compare.cols]
   }
   log.data.SAM <- log2(data.SAM)
+  
   genenames <- as.data.frame(background.subtraction.obj$symbol)
   geneid <- as.data.frame(background.subtraction.obj$id)
+  
+  symbol.index <- background.subtraction.obj$symbol.index
+  geneid.index <- background.subtraction.obj$id.index
+  pipeline.name <- background.subtraction.obj$pipeline.name
   
   if(length(response) != ncol(data.SAM)) {
     stop("Number of responses does not match number of samples.")
@@ -68,25 +73,27 @@ SigGenesSAM <- function(background.subtraction.obj, class.compare.cols,
                                           nperms=200))
   }  
 
-  cat("Calculating delta table\n")
-  capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj, 
-                                                               nvals=1000))
   
-  delta <- delta.table[which(delta.table[, 5] <= fdr.cutoff)[1], 1]
-  while (is.na(delta)) {
-    fdr.cutoff <- fdr.cutoff + 0.05
-    if (fdr.cutoff == 1.00) {
-      stop("Have reached cutoff of 1.00 and no delta found.")
-    }
-    cat("Cutoff is too stringent, no delta available. Increasing FDR cutoff to ",
-        fdr.cutoff, "\n")
+  if(missing(delta)) {
+    cat("Calculating delta table\n")
+    capture.output(delta.table <- samr::samr.compute.delta.table(samr.obj, 
+                                                                 nvals=1000))
+    
     delta <- delta.table[which(delta.table[, 5] <= fdr.cutoff)[1], 1]
+    while (is.na(delta)) {
+      fdr.cutoff <- fdr.cutoff + 0.05
+      if (fdr.cutoff == 1.00) {
+        stop("Have reached cutoff of 1.00 and no delta found.")
+      }
+      cat("Cutoff is too stringent, no delta available. Increasing FDR cutoff to ",
+          fdr.cutoff, "\n")
+      delta <- delta.table[which(delta.table[, 5] <= fdr.cutoff)[1], 1]
+    }
   }
   desc.data.SAM <- data.frame(background.subtraction.obj$desc.stats, data.SAM)
   
   # samr.compute.siggenes.table flips genename and geneid
-  symbol.id.columns <- c(background.subtraction.obj$symbol.index, 
-                         background.subtraction.obj$id.index)
+  symbol.id.columns <- c(symbol.index, geneid.index)
   colnames(desc.data.SAM)[symbol.id.columns] <- c("geneid", "genenames")
   siggenes.table <- samr::samr.compute.siggenes.table(samr.obj, delta, 
                                                       desc.data.SAM,
@@ -103,13 +110,13 @@ SigGenesSAM <- function(background.subtraction.obj, class.compare.cols,
   }
     
   if (!missing(class.compare.name)) {
-    siggenes.file=paste0(background.subtraction.obj$pipeline.name, "_pipeline/",
-                        background.subtraction.obj$pipeline.name, "_siggenes_",
-                        class.compare.name, ".csv")
+    siggenes.file=paste0(pipeline.name, "_pipeline/",
+                         pipeline.name, "_siggenes_",
+                         class.compare.name, ".csv")
   }
   else {
-    siggenes.file=paste0(background.subtraction.obj$pipeline.name, "_pipeline/",
-                        background.subtraction.obj$pipeline.name, "_siggenes.csv")
+    siggenes.file=paste0(pipeline.name, "_pipeline/",
+                         pipeline.name, "_siggenes.csv")
   }
     
   all.siggenes <- as.matrix(rbind(siggenes.table$genes.up, siggenes.table$genes.lo))
@@ -121,34 +128,44 @@ SigGenesSAM <- function(background.subtraction.obj, class.compare.cols,
     c(delta, rep(" ", nrow(ordered.all.siggenes)-1)))
   write.siggenes$fdr.cutoff <- as.character(
     c(fdr.cutoff, rep(" ", nrow(ordered.all.siggenes)-1)))
-  write.csv(write.siggenes, file=siggenes.file, row.names=F)
+  write.csv(write.siggenes[,-1], file=siggenes.file, row.names=F)
   cat("Significant gene list available at ./", siggenes.file, "\n", sep="")
   
   colnames(ordered.all.siggenes) <- make.names(colnames(all.siggenes))
+  
   if (missing(class.compare.cols)) {
     sam.return.list <- list(siggenes.table=ordered.all.siggenes, 
-                            data=desc.data.SAM,
+                            normalized=desc.data.SAM,
                             ntext=background.subtraction.obj$ntext,
-                            pipeline.name=background.subtraction.obj$pipeline.name,
+                            pipeline.name=pipeline.name,
                             response=response,
                             data.col=background.subtraction.obj$data.col,
-                            id.index=background.subtraction.obj$id.index,
-                            symbol.index=background.subtraction.obj$symbol.index)
+                            id.index=geneid.index,
+                            symbol.index=symbol.index,
+                            fdr.cutoff=fdr.cutoff)
+    save(background.subtraction.obj, sam.return.list, 
+         file=paste0(pipeline.name, "_pipeline/", "PIMENTo-", pipeline.name, "_", 
+                     format(Sys.time(), "%Y-%m-%d_%H%M%S"), ".RData"))
   }
   else {
     ntext <- background.subtraction.obj$ntext
     subsetclass.compare.cols <- c((ntext+1):(ntext+length(class.compare.cols)))
     sam.return.list <- list(siggenes.table=ordered.all.siggenes, 
-                            data=desc.data.SAM,
+                            normalized=desc.data.SAM,
                             ntext=background.subtraction.obj$ntext, 
-                            pipeline.name=background.subtraction.obj$pipeline.name,
+                            pipeline.name=pipeline.name,
                             response=response, 
                             data.col=background.subtraction.obj$data.col, 
                             class.compare.cols=subsetclass.compare.cols, 
                             class.compare.name=class.compare.name,
-                            id.index=background.subtraction.obj$id.index,
-                            symbol.index=background.subtraction.obj$symbol.index
-              )
+                            id.index=geneid.index,
+                            symbol.index=symbol.index,
+                            fdr.cutoff=fdr.cutoff)
+    
+    save(background.subtraction.obj, sam.return.list, 
+         file=paste0(pipeline.name, "_pipeline/", "PIMENTo-", pipeline.name, 
+                     "_", class.compare.name, "_", 
+                     format(Sys.time(), "%Y-%m-%d_%H%M%S"), ".RData"))
   }
   SampleSimilarity(sam.return.list)
 

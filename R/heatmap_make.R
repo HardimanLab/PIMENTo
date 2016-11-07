@@ -3,6 +3,7 @@
 HeatmapMake <- function(heatmap.data, graph.title, cluster, filenames, 
                         subsets.dir) {  
   
+  writeLines(row.names(heatmap.data), paste0("gene-names-present-",graph.title,".txt"))
   heatmap.colors <- c("#000033", "#333366", "#666699", "#9999CC", "#CCCCFF",
                       "#EEEEFF", "#FFFFFF", "#FFEEEE", "#FFCCCC", "#FF9999",
                       "#FF6666", "#FF3333", "#CC0000")
@@ -36,7 +37,8 @@ HeatmapMake <- function(heatmap.data, graph.title, cluster, filenames,
               Rowv=row.v.status,
               Colv=col.v.status,
               breaks=c(-7:-1/7,  1:7/7),
-              cexRow=1, cexCol=1, srtCol=45,
+              cexRow=max(1 - (nrow(heatmap.data) * 0.455^8), 0.001),
+              cexCol=1, srtCol=45,
               col=heatmap.colors))
   garbage <- dev.off()               # close the EPS device
   
@@ -59,7 +61,8 @@ HeatmapMake <- function(heatmap.data, graph.title, cluster, filenames,
               Colv=col.v.status,
               keysize=1,
               breaks=c(-7:-1/7,  1:7/7),
-              cexRow=1, cexCol=1, srtCol=45,
+              cexRow=max(1 - (nrow(heatmap.data) * 0.455^8), 0.001),
+              cexCol=1, srtCol=45,
 	            lmat=lmat, lwid=lwid, lhei=lhei,
               col=heatmap.colors))
   garbage <- dev.off()               # close the PDF device
@@ -77,7 +80,8 @@ HeatmapMake <- function(heatmap.data, graph.title, cluster, filenames,
               Rowv=row.v.status,
               Colv=col.v.status,
               breaks=c(-7:-1/7, 1:7/7),
-              cexRow=1,cexCol=1,srtCol=45,
+              cexRow=max(1 - (nrow(heatmap.data) * 0.455^8), 0.001),
+              cexCol=1,srtCol=45,
               col=heatmap.colors))
   garbage <- dev.off()               # close the FIG device
   
@@ -95,7 +99,8 @@ HeatmapMake <- function(heatmap.data, graph.title, cluster, filenames,
                 Rowv=row.v.status,
                 Colv=col.v.status,
                 breaks=c(-7:-1/7, 1:7/7),
-                cexRow=1, cexCol=1, srtCol=45,
+                cexRow=max(1 - (nrow(heatmap.data) * 0.455^8), 0.001),
+                cexCol=1, srtCol=45,
                 col=heatmap.colors))
     garbage <- dev.off()  # close the TIFF device
   }

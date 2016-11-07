@@ -41,7 +41,7 @@ SampleSimilarity <- function(sig.genes.sam.obj) {
   colnames(dist.matrix) <- colnames(rld)
   rownames(dist.matrix) <- colnames(dist.matrix)
   
-  hclustfunc <- function(x) hclust(x, method="complete")
+  hclustfunc <- function(x) hclust(x, method="ward.D2")
   distfunc <- function(x) dist(x, method="euclidean")
   cl.row <- hclustfunc(distfunc(dist.matrix))
   cl.col <- hclustfunc(distfunc(t(dist.matrix)))
