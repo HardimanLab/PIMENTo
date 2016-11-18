@@ -49,12 +49,12 @@ PreprocessData <- function(input.file, file.sheet=1, ntext=2, data.col,
   format <- c(2, 3)
   remove.batch <- F
 
-  if (!is.na(batch.vector)) {
+  if (!any(is.na(batch.vector))) {
     if (!length(batch.vector == length(data.col))) {
       stop("Length of batch vector must equal number of data columns.")
     }
     remove.batch <- T
-    X[, dataCol] <- limma::removeBatchEffect(X[, dataCol], batch=batch.vector)
+    X[, data.col] <- limma::removeBatchEffect(X[, data.col], batch=batch.vector)
   }
   
   labels <- colnames(X)[data.col]
