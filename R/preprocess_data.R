@@ -41,8 +41,7 @@ PreprocessData <- function(input.file, file.sheet=1, ntext=2, data.col,
   else if (ext == "txt")
     X <- read.table(input.file, header=TRUE, sep="\t", stringsAsFactors=F)
   else
-    stop("Input file must be a .xlsx spreadsheet, comma-separated .csv, or 
-         tab-seperated .txt")
+    stop("Input file must be a .xlsx spreadsheet, comma-separated .csv, or tab-seperated .txt")
   
   pipeline.name <- tools::file_path_sans_ext(input.file)
   panels <- length(data.col)
@@ -54,7 +53,7 @@ PreprocessData <- function(input.file, file.sheet=1, ntext=2, data.col,
       stop("Length of batch vector must equal number of data columns.")
     }
     remove.batch <- T
-    X[, data.col] <- limma::removeBatchEffect(X[, data.col], batch=batch.vector)
+    X[, data.col] <- exp(limma::removeBatchEffect(log(X[, data.col]), batch=batch.vector))
   }
   
   labels <- colnames(X)[data.col]
