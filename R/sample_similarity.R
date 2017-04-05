@@ -30,10 +30,10 @@ SampleSimilarity <- function(sig.genes.sam.obj) {
   ## Create heatmap plot of sample similarity
   if ("class.compare.cols" %in% names(sig.genes.sam.obj)) {
     norm.data <- 
-      as.matrix(sig.genes.sam.obj$data[, sig.genes.sam.obj$class.compare.cols])
+      as.matrix(sig.genes.sam.obj$normalized[, sig.genes.sam.obj$class.compare.cols])
   }
   else {
-    norm.data <- as.matrix(sig.genes.sam.obj$data[, sig.genes.sam.obj$data.col])
+    norm.data <- as.matrix(sig.genes.sam.obj$normalized[, sig.genes.sam.obj$data.col])
   }
   storage.mode(norm.data) <- "integer"
   rld <- DESeq2::rlog(norm.data, fitType="local")
