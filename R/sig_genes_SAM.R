@@ -59,6 +59,9 @@ SigGenesSAM <- function(background.subtraction.obj, class.compare.cols,
   
   list.SAM = list(x=log.data.SAM, y=response, genenames=genenames, 
                   geneid=geneid, logged2=T)
+  
+  list.SAM$x <- as.matrix(list.SAM$x)
+  
   cat("Beginning SAM processing\n")
   
   if (sum(response < 0) == 0) {
