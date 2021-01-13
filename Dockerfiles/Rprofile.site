@@ -1,0 +1,3 @@
+cat("\nWelcome to PIMENTo\n\n")
+cat("For the latest documentation please refer to:
+https://github.com/HardimanLab/PIMENTo\n\n")
